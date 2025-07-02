@@ -1,6 +1,6 @@
 
-import { useState, useEffect } from 'react';
-import { Search, Plus, Settings, User, Calendar, Clock, Link, MoreHorizontal, Eye, Copy, Menu } from 'lucide-react';
+import { useState } from 'react';
+import { Search, Plus, Settings, User, Calendar, Clock, Link, MoreHorizontal, Eye, Copy, Menu, ChevronDown } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
 const Index = () => {
@@ -55,226 +55,207 @@ const Index = () => {
     event.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const getColorClass = (color: string) => {
-    switch (color) {
-      case 'azure': return 'border-azure/20 hover:border-azure/40';
-      case 'pulse': return 'border-pulse/20 hover:border-pulse/40';
-      case 'amber': return 'border-amber/20 hover:border-amber/40';
-      case 'quantum': return 'border-quantum/20 hover:border-quantum/40';
-      default: return 'border-border';
-    }
-  };
-
-  const getAccentColor = (color: string) => {
-    switch (color) {
-      case 'azure': return 'text-azure';
-      case 'pulse': return 'text-pulse';
-      case 'amber': return 'text-amber';
-      case 'quantum': return 'text-quantum';
-      default: return 'text-muted-foreground';
-    }
-  };
+  const sidebarItems = [
+    { icon: Calendar, label: 'Event Types', active: true },
+    { icon: Calendar, label: 'Bookings', active: false },
+    { icon: Clock, label: 'Availability', active: false },
+    { icon: User, label: 'Teams', active: false },
+    { icon: Settings, label: 'Settings', active: false }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
-      {/* Clean Modern Sidebar */}
-      <div className={`fixed left-0 top-0 h-full bg-white border-r border-border z-50 transition-all duration-300 ${
+    <div className="min-h-screen bg-gray-50">
+      {/* Sidebar */}
+      <div className={`fixed left-0 top-0 h-full bg-white border-r border-gray-200 z-50 transition-all duration-300 ${
         sidebarOpen ? 'w-64' : 'w-16'
       }`}>
         
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-border">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg bg-azure flex items-center justify-center">
-                <Calendar className="w-4 h-4 text-white" />
-              </div>
-              {sidebarOpen && <span className="font-semibold text-foreground">Cal.com</span>}
+        <div className="h-16 px-4 border-b border-gray-200 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-lg bg-azure flex items-center justify-center">
+              <Calendar className="w-4 h-4 text-white" />
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="w-8 h-8"
-            >
-              <Menu className="w-4 h-4" />
-            </Button>
+            {sidebarOpen && <span className="font-semibold text-gray-900 text-sm">Cal.com</span>}
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="w-8 h-8 hover:bg-gray-100"
+          >
+            <Menu className="w-4 h-4" />
+          </Button>
         </div>
 
         {/* User Profile */}
         {sidebarOpen && (
-          <div className="p-4 border-b border-border">
+          <div className="p-4 border-b border-gray-100">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center">
-                <User className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center">
+                <User className="w-4 h-4 text-white" />
               </div>
               <div>
-                <div className="font-medium text-sm">Sanskar Yadav</div>
-                <div className="text-xs text-muted-foreground">sanskar@example.com</div>
+                <div className="font-medium text-sm text-gray-900">Sanskar Yadav</div>
+                <div className="text-xs text-gray-500">sanskar@example.com</div>
               </div>
             </div>
           </div>
         )}
 
         {/* Navigation */}
-        <nav className="p-3 space-y-1">
-          {[
-            { icon: Calendar, label: 'Event Types', active: true },
-            { icon: Calendar, label: 'Bookings', active: false },
-            { icon: Clock, label: 'Availability', active: false },
-            { icon: User, label: 'Teams', active: false },
-            { icon: Settings, label: 'Settings', active: false }
-          ].map(({ icon: Icon, label, active }) => (
+        <nav className="p-2">
+          {sidebarItems.map(({ icon: Icon, label, active }) => (
             <button
               key={label}
-              className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
+              className={`w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors mb-1 ${
                 active 
-                  ? 'bg-azure/10 text-azure border border-azure/20' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  ? 'bg-azure/10 text-azure' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
               }`}
             >
               <Icon className="w-4 h-4 flex-shrink-0" />
-              {sidebarOpen && <span>{label}</span>}
+              {sidebarOpen && <span className="ml-3">{label}</span>}
             </button>
           ))}
         </nav>
-
-        {/* Bottom Actions */}
-        {sidebarOpen && (
-          <div className="absolute bottom-4 left-4 right-4 space-y-1">
-            {[
-              { icon: Eye, label: 'View public page' },
-              { icon: Copy, label: 'Copy public page link' }
-            ].map(({ icon: Icon, label }) => (
-              <button
-                key={label}
-                className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              >
-                <Icon className="w-4 h-4" />
-                <span className="text-xs">{label}</span>
-              </button>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Main Content */}
-      <div className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-16'} p-8`}>
+      <div className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-16'}`}>
         
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-semibold text-foreground mb-2">
+        {/* Top Header */}
+        <div className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center">
+                <User className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <span className="text-sm font-medium text-gray-900">Sanskar Yadav</span>
+                <span className="text-sm text-gray-500 ml-2">sanskar@example.com</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 pr-4 py-2 w-64 bg-gray-100 border border-transparent rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-azure/20 focus:border-azure focus:bg-white transition-colors"
+              />
+            </div>
+            <Button className="bg-azure hover:bg-azure/90 text-white text-sm px-4 py-2">
+              <Plus className="w-4 h-4 mr-2" />
+              New
+            </Button>
+          </div>
+        </div>
+
+        {/* Page Content */}
+        <div className="p-6">
+          
+          {/* Page Header */}
+          <div className="mb-8">
+            <h1 className="text-2xl font-semibold text-gray-900 mb-2">
               Event Types
             </h1>
-            <p className="text-muted-foreground">Create events to share for people to book on your calendar.</p>
+            <p className="text-gray-600 text-sm">Create events to share for people to book on your calendar.</p>
           </div>
-          <Button className="bg-azure hover:bg-azure/90 text-white px-6">
-            <Plus className="w-4 h-4 mr-2" />
-            New
-          </Button>
-        </div>
 
-        {/* User Card */}
-        <div className="bg-white rounded-xl p-6 mb-6 border border-border subtle-shadow">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-azure to-quantum flex items-center justify-center">
-              <User className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground">Sanskar Yadav</h3>
-              <p className="text-sm text-muted-foreground">Professional scheduling made simple</p>
-            </div>
+          {/* Filters */}
+          <div className="flex items-center space-x-3 mb-6">
+            <Button variant="outline" className="text-sm">
+              All Event Types
+              <ChevronDown className="w-4 h-4 ml-2" />
+            </Button>
+            <Button variant="outline" className="text-sm">
+              All Categories
+              <ChevronDown className="w-4 h-4 ml-2" />
+            </Button>
           </div>
-        </div>
 
-        {/* Search Bar */}
-        <div className="relative mb-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Search event types..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-11 pr-4 py-3 bg-white rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-azure/20 focus:border-azure transition-colors"
-          />
-        </div>
-
-        {/* Event Types List */}
-        <div className="space-y-4">
-          {filteredEventTypes.map((event) => (
-            <div
-              key={event.id}
-              className={`bg-white rounded-xl p-6 border transition-all duration-200 hover-lift ${getColorClass(event.color)}`}
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-3">
-                    <h3 className="text-lg font-semibold text-foreground">
-                      {event.title}
-                    </h3>
-                    <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-md font-mono">
-                      {event.slug}
-                    </span>
+          {/* Event Types Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredEventTypes.map((event) => (
+              <div
+                key={event.id}
+                className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-sm transition-shadow"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    event.color === 'azure' ? 'bg-azure' :
+                    event.color === 'pulse' ? 'bg-pulse' :
+                    event.color === 'amber' ? 'bg-amber' :
+                    'bg-quantum'
+                  }`}>
+                    <Calendar className="w-5 h-5 text-white" />
                   </div>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    {event.description}
-                  </p>
                   
-                  {/* Duration Tags */}
                   <div className="flex items-center space-x-2">
-                    {event.durations.map((duration) => (
-                      <span
-                        key={duration}
-                        className="px-3 py-1.5 bg-muted text-muted-foreground rounded-lg text-sm font-medium border border-border hover:border-border transition-colors flex items-center space-x-1"
-                      >
-                        <Clock className="w-3 h-3" />
-                        <span>{duration}</span>
-                      </span>
-                    ))}
+                    {/* Toggle Switch */}
+                    <div className={`relative w-8 h-4 rounded-full transition-colors cursor-pointer ${
+                      event.isActive ? 'bg-azure' : 'bg-gray-300'
+                    }`}>
+                      <div className={`absolute w-3 h-3 bg-white rounded-full top-0.5 transition-all shadow-sm ${
+                        event.isActive ? 'left-4' : 'left-0.5'
+                      }`}></div>
+                    </div>
+                    
+                    <Button variant="ghost" size="icon" className="w-8 h-8">
+                      <MoreHorizontal className="w-4 h-4 text-gray-400" />
+                    </Button>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-3 ml-6">
-                  {/* Toggle Switch */}
-                  <div className={`relative w-11 h-6 rounded-full transition-colors cursor-pointer ${
-                    event.isActive ? 'bg-azure' : 'bg-muted'
-                  }`}>
-                    <div className={`absolute w-5 h-5 bg-white rounded-full top-0.5 transition-all shadow-sm ${
-                      event.isActive ? 'left-5' : 'left-0.5'
-                    }`}></div>
-                  </div>
-                  
-                  {/* Action Buttons */}
-                  <div className="flex space-x-1">
-                    {[
-                      { icon: Link, color: 'azure' },
-                      { icon: Copy, color: 'muted-foreground' },
-                      { icon: MoreHorizontal, color: 'muted-foreground' }
-                    ].map(({ icon: Icon, color }, index) => (
-                      <Button
-                        key={index}
-                        variant="ghost"
-                        size="icon"
-                        className="w-9 h-9 hover:bg-muted"
-                      >
-                        <Icon className={`w-4 h-4 text-${color}`} />
-                      </Button>
-                    ))}
-                  </div>
+                <div className="mb-3">
+                  <h3 className="font-semibold text-gray-900 text-base mb-1">
+                    {event.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                    {event.description}
+                  </p>
+                </div>
+                
+                {/* Duration Tags */}
+                <div className="flex items-center space-x-2 mb-4">
+                  {event.durations.map((duration) => (
+                    <span
+                      key={duration}
+                      className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs font-medium flex items-center space-x-1"
+                    >
+                      <Clock className="w-3 h-3" />
+                      <span>{duration}</span>
+                    </span>
+                  ))}
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                  <Button variant="ghost" size="sm" className="text-azure hover:bg-azure/10 text-sm px-3">
+                    <Link className="w-4 h-4 mr-2" />
+                    View
+                  </Button>
+                  <Button variant="ghost" size="sm" className="text-gray-500 hover:bg-gray-100 text-sm px-3">
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy
+                  </Button>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* No Results */}
-        {filteredEventTypes.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">No event types found matching your search.</p>
+            ))}
           </div>
-        )}
+
+          {/* No Results */}
+          {filteredEventTypes.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-sm">No event types found matching your search.</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
