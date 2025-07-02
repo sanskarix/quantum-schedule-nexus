@@ -1,16 +1,11 @@
 
 import { useState, useEffect } from 'react';
-import { Search, Plus, Settings, User, Calendar, Clock, Link, MoreHorizontal, Eye, Copy, Zap } from 'lucide-react';
+import { Search, Plus, Settings, User, Calendar, Clock, Link, MoreHorizontal, Eye, Copy, Menu } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    // Trigger entrance animations
-    setTimeout(() => setIsLoaded(true), 100);
-  }, []);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const eventTypes = [
     {
@@ -30,7 +25,7 @@ const Index = () => {
       description: "Let's chat about how your skills can be an asset for our team. No stress, just good vibes and great questions!",
       durations: ['30m', '60m'],
       isActive: true,
-      color: 'quantum',
+      color: 'pulse',
       priority: 'medium'
     },
     {
@@ -50,7 +45,7 @@ const Index = () => {
       description: "Open Agenda! Let's brainstorm over coffee or talk about your favorite singer. Whatever it is, I'm all ears! 🍵",
       durations: ['15m', '30m', '60m'],
       isActive: true,
-      color: 'pulse',
+      color: 'quantum',
       priority: 'low'
     }
   ];
@@ -60,269 +55,224 @@ const Index = () => {
     event.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const getCardStyle = (color: string, priority: string) => {
-    const baseStyle = "relative overflow-hidden";
-    const priorityGlow = priority === 'high' ? 'shadow-lg shadow-azure/20' : '';
-    return `${baseStyle} ${priorityGlow}`;
-  };
-
-  const getBorderColor = (color: string) => {
+  const getColorClass = (color: string) => {
     switch (color) {
-      case 'azure': return 'border-azure/30';
-      case 'quantum': return 'border-quantum/30';
-      case 'amber': return 'border-amber/30';
-      case 'pulse': return 'border-pulse/30';
-      default: return 'border-white/10';
+      case 'azure': return 'border-azure/20 hover:border-azure/40';
+      case 'pulse': return 'border-pulse/20 hover:border-pulse/40';
+      case 'amber': return 'border-amber/20 hover:border-amber/40';
+      case 'quantum': return 'border-quantum/20 hover:border-quantum/40';
+      default: return 'border-border';
     }
   };
 
   const getAccentColor = (color: string) => {
     switch (color) {
       case 'azure': return 'text-azure';
-      case 'quantum': return 'text-quantum';
-      case 'amber': return 'text-amber';
       case 'pulse': return 'text-pulse';
+      case 'amber': return 'text-amber';
+      case 'quantum': return 'text-quantum';
       default: return 'text-muted-foreground';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-carbon via-slate-900 to-carbon relative overflow-hidden">
-      {/* Neural Network Background */}
-      <div className="absolute inset-0 grid-8 opacity-20"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-azure/5 to-transparent animate-pulse"></div>
-
-      {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-64 glass-intense border-r border-white/10 z-50 backdrop-blur-xl">
-        {/* User Profile */}
-        <div className="p-6 border-b border-white/10">
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-azure to-amber quantum-glow flex items-center justify-center">
-                <User className="w-4 h-4 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
+      {/* Clean Modern Sidebar */}
+      <div className={`fixed left-0 top-0 h-full bg-white border-r border-border z-50 transition-all duration-300 ${
+        sidebarOpen ? 'w-64' : 'w-16'
+      }`}>
+        
+        {/* Sidebar Header */}
+        <div className="p-4 border-b border-border">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-lg bg-azure flex items-center justify-center">
+                <Calendar className="w-4 h-4 text-white" />
               </div>
-              <div className="absolute -inset-1 bg-gradient-to-r from-azure to-amber rounded-full opacity-20 animate-pulse"></div>
+              {sidebarOpen && <span className="font-semibold text-foreground">Cal.com</span>}
             </div>
-            <span className="text-sm font-medium text-foreground">Sanskar Yad...</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="w-8 h-8"
+            >
+              <Menu className="w-4 h-4" />
+            </Button>
           </div>
         </div>
 
+        {/* User Profile */}
+        {sidebarOpen && (
+          <div className="p-4 border-b border-border">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center">
+                <User className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <div className="font-medium text-sm">Sanskar Yadav</div>
+                <div className="text-xs text-muted-foreground">sanskar@example.com</div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Navigation */}
-        <nav className="p-4 space-y-2">
+        <nav className="p-3 space-y-1">
           {[
             { icon: Calendar, label: 'Event Types', active: true },
             { icon: Calendar, label: 'Bookings', active: false },
             { icon: Clock, label: 'Availability', active: false },
             { icon: User, label: 'Teams', active: false },
-            { icon: Settings, label: 'Apps', active: false },
-            { icon: Settings, label: 'Routing Forms', active: false },
-            { icon: Settings, label: 'Workflows', active: false },
-            { icon: Settings, label: 'Insights', active: false },
-            { icon: Settings, label: 'All Products', active: false }
-          ].map(({ icon: Icon, label, active }, index) => (
+            { icon: Settings, label: 'Settings', active: false }
+          ].map(({ icon: Icon, label, active }) => (
             <button
               key={label}
-              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all duration-500 group relative ${
+              className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
                 active 
-                  ? 'glass-intense text-azure border border-azure/20 quantum-glow' 
-                  : 'text-muted-foreground hover:text-foreground hover:glass hover:border-white/10'
+                  ? 'bg-azure/10 text-azure border border-azure/20' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
-              style={{ animationDelay: `${index * 50}ms` }}
             >
-              <Icon className="w-4 h-4 transition-all duration-300 group-hover:scale-110" />
-              <span>{label}</span>
-              {active && (
-                <div className="absolute right-2 w-2 h-2 bg-azure rounded-full animate-pulse"></div>
-              )}
+              <Icon className="w-4 h-4 flex-shrink-0" />
+              {sidebarOpen && <span>{label}</span>}
             </button>
           ))}
         </nav>
 
         {/* Bottom Actions */}
-        <div className="absolute bottom-4 left-4 right-4 space-y-2">
-          {[
-            { icon: Eye, label: 'View public page' },
-            { icon: Copy, label: 'Copy public page link' },
-            { icon: Settings, label: 'Settings' }
-          ].map(({ icon: Icon, label }, index) => (
-            <button
-              key={label}
-              className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:glass transition-all duration-300 group"
-              style={{ animationDelay: `${(index + 9) * 50}ms` }}
-            >
-              <Icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
-              <span>{label}</span>
-            </button>
-          ))}
-        </div>
+        {sidebarOpen && (
+          <div className="absolute bottom-4 left-4 right-4 space-y-1">
+            {[
+              { icon: Eye, label: 'View public page' },
+              { icon: Copy, label: 'Copy public page link' }
+            ].map(({ icon: Icon, label }) => (
+              <button
+                key={label}
+                className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >
+                <Icon className="w-4 h-4" />
+                <span className="text-xs">{label}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 p-8 relative">
-        {/* Floating Particles */}
-        <div className="absolute top-20 right-20 w-2 h-2 bg-azure rounded-full animate-ping opacity-60"></div>
-        <div className="absolute top-40 right-40 w-1 h-1 bg-amber rounded-full animate-pulse opacity-40"></div>
-        <div className="absolute top-60 right-60 w-1.5 h-1.5 bg-quantum rounded-full animate-bounce opacity-50"></div>
-
+      <div className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-16'} p-8`}>
+        
         {/* Header */}
-        <div className={`flex items-center justify-between mb-8 transition-all duration-1000 ${
-          isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-        }`}>
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-semibold text-holographic mb-2 bg-gradient-to-r from-azure via-amber to-pulse bg-clip-text text-transparent">
+            <h1 className="text-3xl font-semibold text-foreground mb-2">
               Event Types
             </h1>
-            <p className="text-muted-foreground text-lg">Create events to share for people to book on your calendar.</p>
+            <p className="text-muted-foreground">Create events to share for people to book on your calendar.</p>
           </div>
-          <div className="relative group">
-            <Button className="bg-gradient-to-r from-azure to-amber hover:from-azure/90 hover:to-amber/90 text-white px-8 py-3 text-lg quantum-glow transition-all duration-300 group-hover:scale-105">
-              <Plus className="w-5 h-5 mr-2 group-hover:rotate-90 transition-transform duration-300" />
-              New
-            </Button>
-            <div className="absolute -inset-1 bg-gradient-to-r from-azure to-amber rounded-lg opacity-0 group-hover:opacity-20 transition-opacity blur"></div>
-          </div>
+          <Button className="bg-azure hover:bg-azure/90 text-white px-6">
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
         </div>
 
-        {/* User Profile Section */}
-        <div className={`glass-intense rounded-2xl p-6 mb-8 border border-white/10 relative overflow-hidden transition-all duration-1000 delay-200 ${
-          isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-        }`}>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-pulse"></div>
-          <div className="flex items-center space-x-4 relative z-10">
-            <div className="relative">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-azure to-amber quantum-glow flex items-center justify-center floating">
-                <User className="w-6 h-6 text-white" />
-              </div>
-              <div className="absolute -inset-2 bg-gradient-to-r from-azure/20 to-amber/20 rounded-2xl blur-lg animate-pulse"></div>
+        {/* User Card */}
+        <div className="bg-white rounded-xl p-6 mb-6 border border-border subtle-shadow">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-azure to-quantum flex items-center justify-center">
+              <User className="w-6 h-6 text-white" />
             </div>
             <div>
-              <span className="text-xl font-semibold text-holographic">Sanskar Yadav</span>
-              <div className="flex items-center space-x-2 mt-1">
-                <Zap className="w-3 h-3 text-quantum" />
-                <span className="text-sm text-muted-foreground">Neural efficiency: 94%</span>
-              </div>
+              <h3 className="text-lg font-semibold text-foreground">Sanskar Yadav</h3>
+              <p className="text-sm text-muted-foreground">Professional scheduling made simple</p>
             </div>
           </div>
         </div>
 
-        {/* Enhanced Search Bar */}
-        <div className={`relative mb-8 transition-all duration-1000 delay-300 ${
-          isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-        }`}>
-          <div className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-azure transition-colors" />
-            <input
-              type="text"
-              placeholder="Search with neural intelligence..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 glass-intense rounded-xl border border-white/10 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-azure/50 focus:border-azure/50 focus:glass transition-all duration-300 text-lg"
-            />
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-azure/10 via-transparent to-amber/10 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none"></div>
-          </div>
+        {/* Search Bar */}
+        <div className="relative mb-6">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search event types..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-11 pr-4 py-3 bg-white rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-azure/20 focus:border-azure transition-colors"
+          />
         </div>
 
-        {/* Enhanced Event Types List */}
-        <div className="space-y-6">
-          {filteredEventTypes.map((event, index) => (
+        {/* Event Types List */}
+        <div className="space-y-4">
+          {filteredEventTypes.map((event) => (
             <div
               key={event.id}
-              className={`glass-intense rounded-2xl p-6 border ${getBorderColor(event.color)} hover:border-${event.color}/50 transition-all duration-500 hover-glow group relative overflow-hidden ${
-                isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-              }`}
-              style={{ 
-                animationDelay: `${(index + 4) * 200}ms`,
-                background: `linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)`
-              }}
+              className={`bg-white rounded-xl p-6 border transition-all duration-200 hover-lift ${getColorClass(event.color)}`}
             >
-              {/* Animated Border */}
-              <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-${event.color}/20 via-transparent to-${event.color}/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-              
-              {/* Priority Indicator */}
-              <div className={`absolute top-4 right-4 w-3 h-3 rounded-full ${
-                event.priority === 'high' ? 'bg-pulse animate-pulse' :
-                event.priority === 'medium' ? 'bg-amber animate-ping' : 'bg-quantum'
-              }`}></div>
-
-              <div className="flex items-start justify-between relative z-10">
+              <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center space-x-4 mb-3">
-                    <h3 className={`text-xl font-semibold text-foreground group-hover:${getAccentColor(event.color)} transition-colors duration-300`}>
+                  <div className="flex items-center space-x-3 mb-3">
+                    <h3 className="text-lg font-semibold text-foreground">
                       {event.title}
                     </h3>
-                    <span className="text-sm text-muted-foreground font-mono bg-black/20 px-2 py-1 rounded-lg border border-white/10">
+                    <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-md font-mono">
                       {event.slug}
                     </span>
                   </div>
-                  <p className="text-muted-foreground mb-6 leading-relaxed text-lg group-hover:text-foreground/80 transition-colors">
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
                     {event.description}
                   </p>
                   
-                  {/* Enhanced Duration Tags */}
-                  <div className="flex items-center space-x-3">
-                    {event.durations.map((duration, dIndex) => (
-                      <div
+                  {/* Duration Tags */}
+                  <div className="flex items-center space-x-2">
+                    {event.durations.map((duration) => (
+                      <span
                         key={duration}
-                        className={`relative group/duration cursor-pointer transition-all duration-300 hover:scale-110`}
-                        style={{ animationDelay: `${dIndex * 100}ms` }}
+                        className="px-3 py-1.5 bg-muted text-muted-foreground rounded-lg text-sm font-medium border border-border hover:border-border transition-colors flex items-center space-x-1"
                       >
-                        <span className={`px-4 py-2 glass rounded-xl text-sm font-medium border border-white/10 hover:border-${event.color}/50 transition-all duration-300 flex items-center space-x-2 hover:glass-intense`}>
-                          <Clock className="w-3 h-3" />
-                          <span>{duration}</span>
-                        </span>
-                        <div className={`absolute -inset-1 bg-gradient-to-r from-${event.color}/20 to-transparent rounded-xl opacity-0 group-hover/duration:opacity-100 transition-opacity blur`}></div>
-                      </div>
+                        <Clock className="w-3 h-3" />
+                        <span>{duration}</span>
+                      </span>
                     ))}
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-4 ml-8">
-                  {/* Enhanced Toggle Switch */}
-                  <div className="relative">
-                    <div className={`relative w-14 h-7 rounded-full transition-all duration-500 cursor-pointer group/toggle ${
-                      event.isActive ? `bg-${event.color} quantum-glow` : 'bg-muted'
-                    }`}>
-                      <div className={`absolute w-6 h-6 bg-white rounded-full top-0.5 transition-all duration-500 shadow-lg ${
-                        event.isActive ? 'left-7' : 'left-0.5'
-                      } group-hover/toggle:scale-110`}>
-                        <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-${event.color}/20 to-transparent opacity-0 group-hover/toggle:opacity-100 transition-opacity`}></div>
-                      </div>
-                    </div>
+                <div className="flex items-center space-x-3 ml-6">
+                  {/* Toggle Switch */}
+                  <div className={`relative w-11 h-6 rounded-full transition-colors cursor-pointer ${
+                    event.isActive ? 'bg-azure' : 'bg-muted'
+                  }`}>
+                    <div className={`absolute w-5 h-5 bg-white rounded-full top-0.5 transition-all shadow-sm ${
+                      event.isActive ? 'left-5' : 'left-0.5'
+                    }`}></div>
                   </div>
                   
-                  {/* Enhanced Action Buttons */}
-                  <div className="flex space-x-2">
+                  {/* Action Buttons */}
+                  <div className="flex space-x-1">
                     {[
                       { icon: Link, color: 'azure' },
-                      { icon: Copy, color: 'amber' },
+                      { icon: Copy, color: 'muted-foreground' },
                       { icon: MoreHorizontal, color: 'muted-foreground' }
-                    ].map(({ icon: Icon, color }, btnIndex) => (
+                    ].map(({ icon: Icon, color }, index) => (
                       <Button
-                        key={btnIndex}
+                        key={index}
                         variant="ghost"
                         size="icon"
-                        className={`glass hover:glass-intense w-10 h-10 rounded-xl transition-all duration-300 hover:scale-110 group/btn hover:border-${color}/30`}
+                        className="w-9 h-9 hover:bg-muted"
                       >
-                        <Icon className={`w-4 h-4 text-${color} group-hover/btn:scale-125 transition-transform`} />
+                        <Icon className={`w-4 h-4 text-${color}`} />
                       </Button>
                     ))}
                   </div>
                 </div>
               </div>
-
-              {/* Hover Effect Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
             </div>
           ))}
         </div>
 
-        {/* Enhanced No Results */}
+        {/* No Results */}
         {filteredEventTypes.length === 0 && (
-          <div className="text-center py-16 relative">
-            <div className="relative inline-block">
-              <p className="text-muted-foreground text-xl">No quantum matches found</p>
-              <div className="absolute -inset-4 bg-gradient-to-r from-azure/10 via-transparent to-amber/10 rounded-lg blur-lg"></div>
-            </div>
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">No event types found matching your search.</p>
           </div>
         )}
       </div>
