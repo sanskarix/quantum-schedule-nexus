@@ -1,141 +1,201 @@
 
 import { useState } from 'react';
-import { Search, Mic, Calendar, Users, TrendingUp, Clock, Plus, Settings, Bell, User } from 'lucide-react';
-import { HolographicSchedule } from '../components/HolographicSchedule';
-import { QuantumActionBar } from '../components/QuantumActionBar';
-import { NeuralSearchHub } from '../components/NeuralSearchHub';
-import { BiometricsPanel } from '../components/BiometricsPanel';
-import { ClientHologram } from '../components/ClientHologram';
-import { StatsHoloDash } from '../components/StatsHoloDash';
+import { Search, Plus, Settings, User, Calendar, Clock, Link, MoreHorizontal, Eye, Copy } from 'lucide-react';
+import { Button } from '../components/ui/button';
 
 const Index = () => {
-  const [activeView, setActiveView] = useState('schedule');
-  const [selectedClient, setSelectedClient] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const eventTypes = [
+    {
+      id: 1,
+      title: 'Product Demo',
+      slug: '/sanskar/product-demo',
+      description: 'Witness innovation in action! Reserve a time for a personalized demo of our next-gen scheduler (THIS SITE)',
+      durations: ['30m', '45m'],
+      isActive: true
+    },
+    {
+      id: 2,
+      title: 'Interviews 🎬',
+      slug: '/sanskar/interviews',
+      description: "Let's chat about how your skills can be an asset for our team. No stress, just good vibes and great questions!",
+      durations: ['30m', '60m'],
+      isActive: true
+    },
+    {
+      id: 3,
+      title: 'Product Hunt Chats',
+      slug: '/sanskar/product-hunt-chats',
+      description: "The essence of Product Hunt reflects in communities- Select a time suitable for you, and let's talk products!",
+      durations: ['15m', '30m', '45m', '60m'],
+      isActive: true
+    },
+    {
+      id: 4,
+      title: 'Everything Else',
+      slug: '/sanskar/everything-else',
+      description: "Open Agenda! Let's brainstorm over coffee or talk about your favorite singer. Whatever it is, I'm all ears! 🍵",
+      durations: ['15m', '30m', '60m'],
+      isActive: true
+    }
+  ];
+
+  const filteredEventTypes = eventTypes.filter(event =>
+    event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    event.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-carbon via-slate-900 to-carbon grid-8">
-      {/* Neural Navigation Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-20 glass-intense z-50 flex flex-col items-center py-6 space-y-6">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-azure to-amber flex items-center justify-center quantum-glow">
-          <Calendar className="w-5 h-5 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-carbon via-slate-900 to-carbon">
+      {/* Sidebar */}
+      <div className="fixed left-0 top-0 h-full w-64 glass-intense border-r border-white/10 z-50">
+        {/* User Profile */}
+        <div className="p-6 border-b border-white/10">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-azure to-amber quantum-glow flex items-center justify-center">
+              <User className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-sm font-medium text-foreground">Sanskar Yad...</span>
+          </div>
         </div>
-        
-        <nav className="flex flex-col space-y-4">
+
+        {/* Navigation */}
+        <nav className="p-4 space-y-2">
           {[
-            { icon: Calendar, id: 'schedule', active: activeView === 'schedule' },
-            { icon: Users, id: 'clients', active: activeView === 'clients' },
-            { icon: TrendingUp, id: 'analytics', active: activeView === 'analytics' },
-            { icon: Settings, id: 'settings', active: activeView === 'settings' }
-          ].map(({ icon: Icon, id, active }) => (
+            { icon: Calendar, label: 'Event Types', active: true },
+            { icon: Calendar, label: 'Bookings', active: false },
+            { icon: Clock, label: 'Availability', active: false },
+            { icon: User, label: 'Teams', active: false },
+            { icon: Settings, label: 'Apps', active: false },
+            { icon: Settings, label: 'Routing Forms', active: false },
+            { icon: Settings, label: 'Workflows', active: false },
+            { icon: Settings, label: 'Insights', active: false },
+            { icon: Settings, label: 'All Products', active: false }
+          ].map(({ icon: Icon, label, active }) => (
             <button
-              key={id}
-              onClick={() => setActiveView(id)}
-              className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 hover-glow ${
+              key={label}
+              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all duration-300 ${
                 active 
-                  ? 'glass-intense quantum-glow text-azure' 
-                  : 'glass hover:glass-intense text-muted-foreground hover:text-foreground'
+                  ? 'glass-intense text-azure border border-azure/20' 
+                  : 'text-muted-foreground hover:text-foreground hover:glass'
               }`}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-4 h-4" />
+              <span>{label}</span>
             </button>
           ))}
         </nav>
 
-        <div className="mt-auto">
-          <button className="w-12 h-12 rounded-xl glass hover:glass-intense transition-all duration-300 flex items-center justify-center hover-glow">
-            <User className="w-5 h-5 text-muted-foreground" />
+        {/* Bottom Actions */}
+        <div className="absolute bottom-4 left-4 right-4 space-y-2">
+          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:glass transition-all duration-300">
+            <Eye className="w-4 h-4" />
+            <span>View public page</span>
+          </button>
+          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:glass transition-all duration-300">
+            <Copy className="w-4 h-4" />
+            <span>Copy public page link</span>
+          </button>
+          <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:glass transition-all duration-300">
+            <Settings className="w-4 h-4" />
+            <span>Settings</span>
           </button>
         </div>
       </div>
 
-      {/* Main Dashboard Container */}
-      <div className="ml-20 p-8">
-        {/* Neural Search Hub */}
-        <div className="mb-8">
-          <NeuralSearchHub />
+      {/* Main Content */}
+      <div className="ml-64 p-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-semibold text-holographic mb-2">Event Types</h1>
+            <p className="text-muted-foreground">Create events to share for people to book on your calendar.</p>
+          </div>
+          <Button className="bg-azure hover:bg-azure/90 text-white px-6 quantum-glow">
+            <Plus className="w-4 h-4 mr-2" />
+            New
+          </Button>
         </div>
 
-        {/* Quantum Action Bar */}
-        <div className="fixed top-8 right-8 z-40">
-          <QuantumActionBar />
+        {/* User Profile Section */}
+        <div className="glass rounded-2xl p-6 mb-6">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-azure to-amber quantum-glow flex items-center justify-center">
+              <User className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-lg font-medium text-foreground">Sanskar Yadav</span>
+          </div>
         </div>
 
-        {/* Bio-Rhythm Notifications */}
-        <div className="fixed top-8 right-32 z-40">
-          <BiometricsPanel />
+        {/* Search Bar */}
+        <div className="relative mb-8">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-12 pr-4 py-3 glass rounded-xl border border-white/10 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-azure/50 focus:border-azure/50 transition-all duration-300"
+          />
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-8 h-[calc(100vh-12rem)]">
-          {/* Main Content Area */}
-          <div className="xl:col-span-3 space-y-6">
-            {/* Header */}
-            <div className="glass rounded-2xl p-6 animate-fade-in">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-3xl font-semibold text-holographic mb-2">
-                    Mission Control
-                  </h1>
-                  <p className="text-muted-foreground">
-                    Today • {new Date().toLocaleDateString('en-US', { 
-                      weekday: 'long', 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })}
-                  </p>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="glass rounded-xl px-4 py-2 flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-quantum rounded-full animate-pulse"></div>
-                    <span className="text-sm text-quantum font-medium">Live</span>
+        {/* Event Types List */}
+        <div className="space-y-4">
+          {filteredEventTypes.map((event) => (
+            <div key={event.id} className="glass rounded-2xl p-6 hover:glass-intense transition-all duration-300 hover-glow">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <h3 className="text-lg font-semibold text-foreground">{event.title}</h3>
+                    <span className="text-sm text-muted-foreground font-mono">{event.slug}</span>
+                  </div>
+                  <p className="text-muted-foreground mb-4 leading-relaxed">{event.description}</p>
+                  <div className="flex items-center space-x-2">
+                    {event.durations.map((duration) => (
+                      <span
+                        key={duration}
+                        className="px-3 py-1 bg-muted/50 rounded-lg text-sm text-muted-foreground border border-white/10"
+                      >
+                        <Clock className="w-3 h-3 inline mr-1" />
+                        {duration}
+                      </span>
+                    ))}
                   </div>
                 </div>
+                
+                <div className="flex items-center space-x-3 ml-6">
+                  {/* Toggle Switch */}
+                  <div className={`relative w-12 h-6 rounded-full transition-all duration-300 ${
+                    event.isActive ? 'bg-azure quantum-glow' : 'bg-muted'
+                  }`}>
+                    <div className={`absolute w-5 h-5 bg-white rounded-full top-0.5 transition-all duration-300 ${
+                      event.isActive ? 'left-6' : 'left-0.5'
+                    }`} />
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <Button variant="ghost" size="icon" className="glass hover:glass-intense">
+                    <Link className="w-4 h-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="glass hover:glass-intense">
+                    <Copy className="w-4 h-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="glass hover:glass-intense">
+                    <MoreHorizontal className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
-
-            {/* Holographic Schedule View */}
-            <div className="glass rounded-2xl p-6 h-full animate-scale-in">
-              <HolographicSchedule onClientSelect={setSelectedClient} />
-            </div>
-          </div>
-
-          {/* Right Panel */}
-          <div className="space-y-6">
-            {/* Stats Dashboard */}
-            <div className="glass rounded-2xl p-6 animate-fade-in">
-              <StatsHoloDash />
-            </div>
-
-            {/* Client Profile Hologram */}
-            {selectedClient && (
-              <div className="glass rounded-2xl p-6 animate-scale-in">
-                <ClientHologram client={selectedClient} />
-              </div>
-            )}
-
-            {/* Quick Actions */}
-            <div className="glass rounded-2xl p-6 animate-fade-in">
-              <h3 className="text-lg font-semibold mb-4 text-holographic">
-                Quick Launch
-              </h3>
-              <div className="space-y-3">
-                {[
-                  { label: 'New Appointment', color: 'azure', icon: Plus },
-                  { label: 'Client Check-in', color: 'quantum', icon: Users },
-                  { label: 'Time Block', color: 'amber', icon: Clock }
-                ].map(({ label, color, icon: Icon }) => (
-                  <button
-                    key={label}
-                    className={`w-full glass rounded-xl p-3 flex items-center space-x-3 hover-glow transition-all duration-300 hover:bg-${color}/10`}
-                  >
-                    <Icon className={`w-5 h-5 text-${color}`} />
-                    <span className="text-sm font-medium">{label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
+
+        {/* No Results */}
+        {filteredEventTypes.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">No more results</p>
+          </div>
+        )}
       </div>
     </div>
   );
