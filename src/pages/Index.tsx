@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { Search, Plus, Settings, User, Calendar, Clock, Link, MoreHorizontal, Eye, Copy, Menu, Bell, Moon, Sun, ChevronDown, TrendingUp, TrendingDown, GripVertical, Edit, Duplicate, Embed, Trash2, Map, HelpCircle, LogOut, ChevronRight } from 'lucide-react';
+import { Search, Plus, Settings, User, Calendar, Clock, Link, MoreHorizontal, Eye, Copy, Menu, Bell, Moon, Sun, ChevronDown, TrendingUp, TrendingDown, GripVertical, Edit, Code2, Trash2, Map, HelpCircle, LogOut, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Switch } from '../components/ui/switch';
 import {
@@ -593,11 +592,11 @@ const Index = () => {
                             Edit
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Duplicate className="w-4 h-4 mr-2" />
+                            <Copy className="w-4 h-4 mr-2" />
                             Duplicate
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Embed className="w-4 h-4 mr-2" />
+                            <Code2 className="w-4 h-4 mr-2" />
                             Embed
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
