@@ -350,11 +350,7 @@ const Index = () => {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent 
-                  className={`w-80 p-0 transition-all duration-300 ${
-                    isScrolled 
-                      ? `${isDarkMode ? 'bg-[#212124]/80 backdrop-blur-md border-[#818181]/20' : 'bg-white/80 backdrop-blur-md border-gray-200/50'}` 
-                      : `${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`
-                  }`}
+                  className={`w-80 p-0 transition-all duration-300 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}
                   align="end"
                 >
                   <div className={`p-4 border-b transition-colors duration-300 ${isDarkMode ? 'border-[#818181]/20' : 'border-gray-100'}`}>
@@ -370,7 +366,7 @@ const Index = () => {
                             : 'bg-white hover:bg-gray-50 border border-gray-100'
                         } ${notification.unread ? 'shadow-sm' : ''}`}
                       >
-                        <div className="flex justify-between items-start mb-1">
+                        <div className="flex justify-between items-start mb-2">
                           <h4 className={`font-medium text-sm transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                             {notification.title}
                           </h4>
@@ -421,7 +417,7 @@ const Index = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Button className="bg-azure hover:bg-azure/90 text-white">
+              <Button className="bg-azure hover:bg-azure/90 text-white transition-all duration-200 hover:shadow-md">
                 <Plus className="w-4 h-4 mr-2" />
                 New
               </Button>

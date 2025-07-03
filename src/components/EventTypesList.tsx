@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Search, Plus, TrendingUp, TrendingDown, Copy, GripVertical, Eye, MoreHorizontal, Edit, Code2, Trash2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Switch } from './ui/switch';
@@ -34,8 +34,9 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
   onEventClick
 }) => {
   const dragCounter = useRef(0);
-  const [draggedItem, setDraggedItem] = React.useState<number | null>(null);
-  const [dragOverItem, setDragOverItem] = React.useState<number | null>(null);
+  const [draggedItem, setDraggedItem] = useState<number | null>(null);
+  const [dragOverItem, setDragOverItem] = useState<number | null>(null);
+  const [copiedItems, setCopiedItems] = useState<{ [key: string]: boolean }>({});
 
   const stats = [
     { value: 18, label: 'This Month', trend: 'up', change: '+12%' },
@@ -49,32 +50,25 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
     event.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const getColorClass = (color: string) => {
-    switch (color) {
-      case 'azure': return 'bg-azure/10 border-azure/20 dark:bg-azure/20 dark:border-azure/30';
-      case 'pulse': return 'bg-pulse/10 border-pulse/20 dark:bg-pulse/20 dark:border-pulse/30';
-      case 'amber': return 'bg-amber/10 border-amber/20 dark:bg-amber/20 dark:border-amber/30';
-      case 'quantum': return 'bg-quantum/10 border-quantum/20 dark:bg-quantum/20 dark:border-quantum/30';
-      default: return 'bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700';
-    }
-  };
-
-  const getIconColor = (color: string) => {
-    switch (color) {
-      case 'azure': return 'bg-azure text-white';
-      case 'pulse': return 'bg-pulse text-white';
-      case 'amber': return 'bg-amber text-white';
-      case 'quantum': return 'bg-quantum text-white';
-      default: return 'bg-gray-500 text-white';
-    }
-  };
-
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
+    setCopiedItems(prev => ({ ...prev, [id]: true }));
+    setTimeout(() => {
+      setCopiedItems(prev => ({ ...prev, [id]: false }));
+    }, 2000);
   };
 
   const handleTeamSelect = (team: any) => {
     setSelectedTeam(selectedTeam?.id === team.id ? null : team);
+  };
+
+  const handleEventTileClick = (event: any, e: React.MouseEvent) => {
+    // Don't trigger if clicking on interactive elements
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('[role="switch"]')) {
+      return;
+    }
+    onEventClick(event);
   };
 
   const handleDragStart = (e: React.DragEvent, id: number) => {
@@ -135,59 +129,67 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className={`text-2xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+        <h1 className={`text-3xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
           Event Types
         </h1>
-        <p className={`text-sm mt-1 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
+        <p className={`text-base mt-2 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
           Create events to share for people to book on your calendar.
         </p>
       </div>
 
       {/* User Profile Section */}
-      <div className={`rounded-xl p-6 border transition-colors duration-300 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
+      <div className={`rounded-xl p-8 border transition-all duration-300 hover:shadow-lg ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center">
-              <span className="text-white font-semibold text-xl">S</span>
+          <div className="flex items-center space-x-6">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center shadow-lg">
+              <span className="text-white font-semibold text-2xl">S</span>
             </div>
-            <div>
-              <h2 className={`text-xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            <div className="space-y-2">
+              <h2 className={`text-2xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 Sanskar Yadav
               </h2>
-              <div className="flex items-center space-x-2 mt-1">
-                <div className={`px-2 py-1 rounded-md flex items-center space-x-1 transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20' : 'bg-gray-100'}`}>
-                  <span className={`text-sm transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
+              <div className="flex items-center space-x-3">
+                <div className={`px-3 py-2 rounded-lg flex items-center space-x-2 transition-all duration-200 ${isDarkMode ? 'bg-[#818181]/20 hover:bg-[#818181]/30' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                  <span className={`text-sm font-mono transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
                     cal.id/sanskar
                   </span>
-                  <button onClick={() => copyToClipboard('cal.id/sanskar')}>
-                    <Copy className={`w-3 h-3 hover:text-gray-700 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                  <button 
+                    onClick={() => copyToClipboard('cal.id/sanskar', 'profile')}
+                    className="relative"
+                  >
+                    <Copy className={`w-4 h-4 hover:text-gray-700 transition-all duration-200 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                    {copiedItems.profile && (
+                      <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
+                        Copied!
+                      </span>
+                    )}
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Stats */}
+          {/* Enhanced Stats */}
           <div className="flex space-x-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="flex items-center justify-center space-x-1 mb-1">
-                  <span className={`text-2xl font-bold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              <div key={index} className="text-center space-y-1">
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  <span className={`text-3xl font-bold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                     {stat.value}
                   </span>
                   {stat.trend === 'up' ? (
-                    <TrendingUp className="w-5 h-5 text-green-500" />
+                    <TrendingUp className="w-6 h-6 text-green-500" />
                   ) : (
-                    <TrendingDown className="w-5 h-5 text-red-500" />
+                    <TrendingDown className="w-6 h-6 text-red-500" />
                   )}
                 </div>
-                <p className={`text-sm transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
+                <p className={`text-sm font-medium transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
                   {stat.label}
                 </p>
-                <p className={`text-xs ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-sm font-semibold ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
                   {stat.change}
                 </p>
               </div>
@@ -197,59 +199,75 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
       </div>
 
       {/* Teams Section */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <h2 className={`text-lg font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Your Teams
-            </h2>
-            {selectedTeam && (
-              <>
-                <span className={`text-sm transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>•</span>
-                <span className={`text-sm font-medium transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
-                  {selectedTeam.name}
-                </span>
-                <div className={`px-2 py-1 rounded-md flex items-center space-x-1 text-xs transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}>
-                  <span>{selectedTeam.slug}</span>
-                  <button onClick={() => copyToClipboard(selectedTeam.slug)}>
-                    <Copy className="w-3 h-3" />
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+      <div className="space-y-6">
+        <div className="flex items-center space-x-2">
+          <h2 className={`text-xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            Your Teams
+          </h2>
+          {selectedTeam && (
+            <>
+              <span className={`text-lg transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>•</span>
+              <span className={`text-lg font-medium transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
+                {selectedTeam.name}
+              </span>
+              <div className={`px-3 py-1 rounded-lg flex items-center space-x-2 text-sm transition-all duration-200 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181] hover:bg-[#818181]/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                <span className="font-mono">{selectedTeam.slug}</span>
+                <button 
+                  onClick={() => copyToClipboard(selectedTeam.slug, selectedTeam.id)}
+                  className="relative"
+                >
+                  <Copy className="w-3 h-3" />
+                  {copiedItems[selectedTeam.id] && (
+                    <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
+                      Copied!
+                    </span>
+                  )}
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           {teams.slice(0, 4).map((team) => (
             <div
               key={team.id}
               onClick={() => handleTeamSelect(team)}
-              className={`p-4 border-2 cursor-pointer transition-all duration-300 rounded-lg ${
+              className={`p-6 border-2 cursor-pointer transition-all duration-300 rounded-xl ${
                 selectedTeam?.id === team.id 
-                  ? `${getColorClass(team.color)} transform -translate-y-1 shadow-lg` 
-                  : `${isDarkMode ? 'border-[#818181]/20 hover:border-[#818181]/40 bg-[#212124]' : 'border-gray-200 hover:border-gray-300 bg-white'} hover:shadow-md hover:-translate-y-0.5`
+                  ? `border-azure/40 bg-azure/5 transform -translate-y-2 shadow-xl ${isDarkMode ? 'bg-azure/10' : ''}`
+                  : `${isDarkMode ? 'border-[#818181]/20 hover:border-[#818181]/40 bg-[#212124] hover:bg-[#212124]/80' : 'border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50'} hover:shadow-lg hover:-translate-y-1`
               }`}
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-8 h-8 rounded-lg ${getIconColor(team.color)} flex items-center justify-center text-sm`}>
+                <div className="flex items-center space-x-4">
+                  <div className={`w-12 h-12 rounded-xl ${team.color === 'azure' ? 'bg-azure' : team.color === 'pulse' ? 'bg-pulse' : team.color === 'amber' ? 'bg-amber' : 'bg-quantum'} flex items-center justify-center text-white text-lg shadow-md`}>
                     {team.logo}
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2">
-                      <h3 className={`font-medium transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <div className="flex-1 space-y-2">
+                    <div className="flex items-center space-x-3">
+                      <h3 className={`font-semibold text-lg transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                         {team.name}
                       </h3>
                       <button
-                        onClick={(e) => { e.stopPropagation(); copyToClipboard(team.slug); }}
-                        className={`text-xs px-2 py-1 rounded transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181] hover:bg-[#818181]/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          copyToClipboard(team.slug, `team-${team.id}`); 
+                        }}
+                        className={`text-xs px-3 py-1 rounded-full transition-all duration-200 hover:shadow-sm ${isDarkMode ? 'bg-[#818181]/20 text-[#818181] hover:bg-[#818181]/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                       >
-                        Copy link
+                        <div className="flex items-center space-x-1 relative">
+                          <span>Copy link</span>
+                          {copiedItems[`team-${team.id}`] && (
+                            <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
+                              Copied!
+                            </span>
+                          )}
+                        </div>
                       </button>
                     </div>
-                    <div className="flex items-center space-x-1 mt-1">
-                      <span className={`text-xs transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>
+                    <div className="flex items-center space-x-1">
+                      <span className={`text-sm font-mono transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>
                         {team.slug}
                       </span>
                     </div>
@@ -262,68 +280,60 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
       </div>
 
       {/* Search */}
-      <div className="relative mb-4">
-        <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
+      <div className="relative">
+        <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
         <input
           type="text"
           placeholder="Search event types..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className={`w-full pl-11 pr-4 py-3 rounded-lg border transition-colors duration-300 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20 text-white placeholder-[#818181]' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'} focus:outline-none focus:ring-2 focus:ring-azure/20 focus:border-azure`}
+          className={`w-full pl-12 pr-4 py-4 rounded-xl border transition-all duration-300 focus:ring-2 focus:ring-azure/20 focus:border-azure ${isDarkMode ? 'bg-[#212124] border-[#818181]/20 text-white placeholder-[#818181]' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'} focus:outline-none`}
         />
       </div>
 
       {/* Event Types */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         {filteredEventTypes.map((event: any) => (
           <div
             key={event.id}
             draggable
-            onDragStart={(e) => handleDragStart(e, event.id)}
-            onDragEnd={handleDragEnd}
-            onDragEnter={(e) => handleDragEnter(e, event.id)}
-            onDragLeave={handleDragLeave}
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, event.id)}
-            className={`group rounded-lg p-4 border cursor-move transition-all duration-200 ${
+            onClick={(e) => handleEventTileClick(event, e)}
+            className={`group rounded-xl p-6 border cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1 ${
               dragOverItem === event.id 
                 ? `${isDarkMode ? 'border-azure/50 bg-azure/10' : 'border-azure/30 bg-azure/5'}` 
-                : `${isDarkMode ? 'bg-[#212124] border-[#818181]/20 hover:border-[#818181]/40' : 'bg-white border-gray-200 hover:border-gray-300'} hover:shadow-sm`
+                : `${isDarkMode ? 'bg-[#212124] border-[#818181]/20 hover:border-[#818181]/40' : 'bg-white border-gray-200 hover:border-gray-300'}`
             }`}
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4 flex-1">
+              <div className="flex items-center space-x-6 flex-1">
                 {/* Drag Handle */}
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                   <GripVertical className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
                 </div>
 
                 {/* Event Icon */}
-                <div className={`w-10 h-10 rounded-lg ${getIconColor(event.color)} flex items-center justify-center text-lg`}>
+                <div className={`w-14 h-14 rounded-xl ${event.color === 'azure' ? 'bg-azure' : event.color === 'pulse' ? 'bg-pulse' : event.color === 'amber' ? 'bg-amber' : 'bg-quantum'} flex items-center justify-center text-white text-xl shadow-md`}>
                   {event.icon}
                 </div>
 
                 {/* Event Details */}
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <h3 
-                      className={`font-medium cursor-pointer hover:text-azure transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                      onClick={() => onEventClick(event)}
-                    >
+                <div className="flex-1 space-y-3">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <h3 className={`font-semibold text-lg transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       {event.title}
                     </h3>
-                    <span className={`text-xs px-2 py-1 rounded-full transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}>
+                    <span className={`text-sm px-3 py-1 rounded-full transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}>
                       {event.bookingsToday} today
                     </span>
                   </div>
-                  <p className={`text-sm mb-2 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
+                  <p className={`text-base mb-3 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
                     {event.description}
                   </p>
                   <div className="flex items-center space-x-2">
                     {event.durations.map((duration: string) => (
                       <span
                         key={duration}
-                        className={`px-2 py-1 rounded text-xs transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}
+                        className={`px-3 py-1 rounded-full text-sm transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}
                       >
                         {duration}
                       </span>
@@ -333,30 +343,48 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
               </div>
 
               {/* Actions */}
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <Switch 
                   checked={event.isActive}
                   className="data-[state=checked]:bg-azure"
                 />
 
-                <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Button variant="ghost" size="icon" className="w-8 h-8">
-                    <Eye className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="w-10 h-10 transition-all duration-200 hover:shadow-sm"
+                    onClick={(e) => {e.stopPropagation();}}
+                  >
+                    <Eye className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
                   </Button>
 
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="w-8 h-8"
-                    onClick={() => copyToClipboard(event.slug)}
+                    className="w-10 h-10 transition-all duration-200 hover:shadow-sm relative"
+                    onClick={(e) => { 
+                      e.stopPropagation(); 
+                      copyToClipboard(event.slug, `event-${event.id}`); 
+                    }}
                   >
-                    <Copy className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                    <Copy className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                    {copiedItems[`event-${event.id}`] && (
+                      <span className={`absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
+                        Copied!
+                      </span>
+                    )}
                   </Button>
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="w-8 h-8">
-                        <MoreHorizontal className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="w-10 h-10 transition-all duration-200 hover:shadow-sm"
+                        onClick={(e) => {e.stopPropagation();}}
+                      >
+                        <MoreHorizontal className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className={`transition-colors duration-300 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
@@ -388,8 +416,8 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
 
       {/* No Results */}
       {filteredEventTypes.length === 0 && (
-        <div className="text-center py-12">
-          <p className={`transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>
+        <div className="text-center py-16">
+          <p className={`text-lg transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>
             No event types found matching your search.
           </p>
         </div>

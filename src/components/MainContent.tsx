@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { Search, Plus } from 'lucide-react';
 import EventTypesList from './EventTypesList';
 import EventTypeDetail from './EventTypeDetail';
 import BookingsView from './BookingsView';
@@ -9,6 +8,8 @@ import TeamsView from './TeamsView';
 import AppsView from './AppsView';
 import WorkflowsView from './WorkflowsView';
 import InsightsView from './InsightsView';
+import RoutingFormsView from './RoutingFormsView';
+import AllProductsView from './AllProductsView';
 
 interface MainContentProps {
   activeView: string;
@@ -77,10 +78,14 @@ const MainContent: React.FC<MainContentProps> = ({
         return <TeamsView isDarkMode={isDarkMode} teams={teams} />;
       case 'apps':
         return <AppsView isDarkMode={isDarkMode} />;
+      case 'routing-forms':
+        return <RoutingFormsView isDarkMode={isDarkMode} />;
       case 'workflows':
         return <WorkflowsView isDarkMode={isDarkMode} />;
       case 'insights':
         return <InsightsView isDarkMode={isDarkMode} />;
+      case 'all-products':
+        return <AllProductsView isDarkMode={isDarkMode} />;
       default:
         return (
           <EventTypesList
