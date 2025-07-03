@@ -63,12 +63,82 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
   };
 
   const handleEventTileClick = (event: any, e: React.MouseEvent) => {
-    // Don't trigger if clicking on interactive elements
     const target = e.target as HTMLElement;
     if (target.closest('button') || target.closest('[role="switch"]')) {
       return;
     }
     onEventClick(event);
+  };
+
+  const handleCreateEvent = () => {
+    const newEvent = {
+      id: Date.now(),
+      title: 'New Event Type',
+      slug: '/sanskar/new-event',
+      description: 'A new event type for scheduling meetings',
+      durations: ['30m'],
+      isActive: true,
+      color: 'azure',
+      icon: '📅',
+      bookingsToday: 0
+    };
+    
+    if (selectedTeam) {
+      const updatedTeam = {
+        ...selectedTeam,
+        eventTypes: [...selectedTeam.eventTypes, newEvent]
+      };
+      setSelectedTeam(updatedTeam);
+    } else {
+      setEventTypes([...eventTypes, newEvent]);
+    }
+  };
+
+  const handleDeleteEvent = (eventId: number) => {
+    if (selectedTeam) {
+      const updatedTeam = {
+        ...selectedTeam,
+        eventTypes: selectedTeam.eventTypes.filter((e: any) => e.id !== eventId)
+      };
+      setSelectedTeam(updatedTeam);
+    } else {
+      setEventTypes(eventTypes.filter(e => e.id !== eventId));
+    }
+  };
+
+  const handleDuplicateEvent = (event: any) => {
+    const duplicatedEvent = {
+      ...event,
+      id: Date.now(),
+      title: `${event.title} (Copy)`,
+      slug: `${event.slug}-copy`
+    };
+    
+    if (selectedTeam) {
+      const updatedTeam = {
+        ...selectedTeam,
+        eventTypes: [...selectedTeam.eventTypes, duplicatedEvent]
+      };
+      setSelectedTeam(updatedTeam);
+    } else {
+      setEventTypes([...eventTypes, duplicatedEvent]);
+    }
+  };
+
+  const handleToggleActive = (eventId: number) => {
+    if (selectedTeam) {
+      const updatedTeam = {
+        ...selectedTeam,
+        eventTypes: selectedTeam.eventTypes.map((e: any) => 
+          e.id === eventId ? { ...e, isActive: !e.isActive } : e
+        )
+      };
+      setSelectedTeam(updatedTeam);
+    } else {
+      setEventTypes(eventTypes.map(e => 
+        e.id === eventId ? { ...e, isActive: !e.isActive } : e
+      ));
+    }
   };
 
   const handleDragStart = (e: React.DragEvent, id: number) => {
@@ -129,7 +199,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-8">
       {/* Header */}
       <div>
         <h1 className={`text-3xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -141,28 +211,28 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
       </div>
 
       {/* User Profile Section */}
-      <div className={`rounded-xl p-8 border transition-all duration-300 hover:shadow-lg ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
+      <div className={`rounded-xl p-8 border transition-all duration-500 hover:shadow-xl hover:scale-102 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center shadow-lg">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center shadow-xl animate-pulse">
               <span className="text-white font-semibold text-2xl">S</span>
             </div>
             <div className="space-y-2">
-              <h2 className={`text-2xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h2 className={`text-2xl font-semibold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 Sanskar Yadav
               </h2>
               <div className="flex items-center space-x-3">
-                <div className={`px-3 py-2 rounded-lg flex items-center space-x-2 transition-all duration-200 ${isDarkMode ? 'bg-[#818181]/20 hover:bg-[#818181]/30' : 'bg-gray-100 hover:bg-gray-200'}`}>
-                  <span className={`text-sm font-mono transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
+                <div className={`px-3 py-2 rounded-lg flex items-center space-x-2 transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-[#818181]/20 hover:bg-[#818181]/30' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                  <span className={`text-sm font-mono transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
                     cal.id/sanskar
                   </span>
                   <button 
                     onClick={() => copyToClipboard('cal.id/sanskar', 'profile')}
-                    className="relative"
+                    className="relative group"
                   >
-                    <Copy className={`w-4 h-4 hover:text-gray-700 transition-all duration-200 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                    <Copy className={`w-4 h-4 hover:text-gray-700 transition-all duration-200 group-hover:scale-110 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
                     {copiedItems.profile && (
-                      <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
+                      <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-bounce ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
                         Copied!
                       </span>
                     )}
@@ -175,18 +245,18 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
           {/* Enhanced Stats */}
           <div className="flex space-x-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center space-y-1">
+              <div key={index} className="text-center space-y-1 transform transition-all duration-300 hover:scale-110">
                 <div className="flex items-center justify-center space-x-2 mb-2">
-                  <span className={`text-3xl font-bold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <span className={`text-3xl font-bold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                     {stat.value}
                   </span>
                   {stat.trend === 'up' ? (
-                    <TrendingUp className="w-6 h-6 text-green-500" />
+                    <TrendingUp className="w-6 h-6 text-green-500 animate-bounce" />
                   ) : (
-                    <TrendingDown className="w-6 h-6 text-red-500" />
+                    <TrendingDown className="w-6 h-6 text-red-500 animate-bounce" />
                   )}
                 </div>
-                <p className={`text-sm font-medium transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
+                <p className={`text-sm font-medium transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
                   {stat.label}
                 </p>
                 <p className={`text-sm font-semibold ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
@@ -200,32 +270,42 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
 
       {/* Teams Section */}
       <div className="space-y-6">
-        <div className="flex items-center space-x-2">
-          <h2 className={`text-xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-            Your Teams
-          </h2>
-          {selectedTeam && (
-            <>
-              <span className={`text-lg transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>•</span>
-              <span className={`text-lg font-medium transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
-                {selectedTeam.name}
-              </span>
-              <div className={`px-3 py-1 rounded-lg flex items-center space-x-2 text-sm transition-all duration-200 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181] hover:bg-[#818181]/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
-                <span className="font-mono">{selectedTeam.slug}</span>
-                <button 
-                  onClick={() => copyToClipboard(selectedTeam.slug, selectedTeam.id)}
-                  className="relative"
-                >
-                  <Copy className="w-3 h-3" />
-                  {copiedItems[selectedTeam.id] && (
-                    <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
-                      Copied!
-                    </span>
-                  )}
-                </button>
-              </div>
-            </>
-          )}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <h2 className={`text-xl font-semibold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              Your Teams
+            </h2>
+            {selectedTeam && (
+              <>
+                <span className={`text-lg transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>•</span>
+                <span className={`text-lg font-medium transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
+                  {selectedTeam.name}
+                </span>
+                <div className={`px-3 py-1 rounded-lg flex items-center space-x-2 text-sm transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181] hover:bg-[#818181]/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                  <span className="font-mono">{selectedTeam.slug}</span>
+                  <button 
+                    onClick={() => copyToClipboard(selectedTeam.slug, selectedTeam.id)}
+                    className="relative group"
+                  >
+                    <Copy className="w-3 h-3 group-hover:scale-110 transition-transform duration-200" />
+                    {copiedItems[selectedTeam.id] && (
+                      <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-bounce ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
+                        Copied!
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+          
+          <Button 
+            onClick={handleCreateEvent}
+            className="bg-azure hover:bg-azure/90 text-white transition-all duration-300 hover:shadow-lg hover:scale-105"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Create Event Type
+          </Button>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -233,20 +313,20 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
             <div
               key={team.id}
               onClick={() => handleTeamSelect(team)}
-              className={`p-6 border-2 cursor-pointer transition-all duration-300 rounded-xl ${
+              className={`p-6 border-2 cursor-pointer transition-all duration-500 rounded-xl ${
                 selectedTeam?.id === team.id 
-                  ? `border-azure/40 bg-azure/5 transform -translate-y-2 shadow-xl ${isDarkMode ? 'bg-azure/10' : ''}`
-                  : `${isDarkMode ? 'border-[#818181]/20 hover:border-[#818181]/40 bg-[#212124] hover:bg-[#212124]/80' : 'border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50'} hover:shadow-lg hover:-translate-y-1`
+                  ? `border-azure/40 bg-azure/5 transform -translate-y-3 shadow-2xl scale-105 ${isDarkMode ? 'bg-azure/10' : ''}`
+                  : `${isDarkMode ? 'border-[#818181]/20 hover:border-[#818181]/40 bg-[#212124] hover:bg-[#212124]/80' : 'border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50'} hover:shadow-xl hover:-translate-y-2 hover:scale-102`
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <div className={`w-12 h-12 rounded-xl ${team.color === 'azure' ? 'bg-azure' : team.color === 'pulse' ? 'bg-pulse' : team.color === 'amber' ? 'bg-amber' : 'bg-quantum'} flex items-center justify-center text-white text-lg shadow-md`}>
+                  <div className={`w-12 h-12 rounded-xl ${team.color === 'azure' ? 'bg-azure' : team.color === 'pulse' ? 'bg-pulse' : team.color === 'amber' ? 'bg-amber' : 'bg-quantum'} flex items-center justify-center text-white text-lg shadow-lg transition-transform duration-300 group-hover:scale-110`}>
                     {team.logo}
                   </div>
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center space-x-3">
-                      <h3 className={`font-semibold text-lg transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      <h3 className={`font-semibold text-lg transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                         {team.name}
                       </h3>
                       <button
@@ -254,12 +334,12 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                           e.stopPropagation(); 
                           copyToClipboard(team.slug, `team-${team.id}`); 
                         }}
-                        className={`text-xs px-3 py-1 rounded-full transition-all duration-200 hover:shadow-sm ${isDarkMode ? 'bg-[#818181]/20 text-[#818181] hover:bg-[#818181]/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                        className={`text-xs px-3 py-1 rounded-full transition-all duration-300 hover:shadow-sm hover:scale-105 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181] hover:bg-[#818181]/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                       >
                         <div className="flex items-center space-x-1 relative">
                           <span>Copy link</span>
                           {copiedItems[`team-${team.id}`] && (
-                            <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
+                            <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-bounce ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
                               Copied!
                             </span>
                           )}
@@ -267,7 +347,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                       </button>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <span className={`text-sm font-mono transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>
+                      <span className={`text-sm font-mono transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>
                         {team.slug}
                       </span>
                     </div>
@@ -281,13 +361,13 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
 
       {/* Search */}
       <div className="relative">
-        <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
+        <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
         <input
           type="text"
           placeholder="Search event types..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className={`w-full pl-12 pr-4 py-4 rounded-xl border transition-all duration-300 focus:ring-2 focus:ring-azure/20 focus:border-azure ${isDarkMode ? 'bg-[#212124] border-[#818181]/20 text-white placeholder-[#818181]' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'} focus:outline-none`}
+          className={`w-full pl-12 pr-4 py-4 rounded-xl border transition-all duration-500 focus:ring-2 focus:ring-azure/20 focus:border-azure focus:scale-102 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20 text-white placeholder-[#818181]' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'} focus:outline-none`}
         />
       </div>
 
@@ -298,42 +378,39 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
             key={event.id}
             draggable
             onClick={(e) => handleEventTileClick(event, e)}
-            className={`group rounded-xl p-6 border cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1 ${
+            className={`group rounded-xl p-6 border cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-2 hover:scale-102 ${
               dragOverItem === event.id 
-                ? `${isDarkMode ? 'border-azure/50 bg-azure/10' : 'border-azure/30 bg-azure/5'}` 
+                ? `${isDarkMode ? 'border-azure/50 bg-azure/10 scale-105' : 'border-azure/30 bg-azure/5 scale-105'}` 
                 : `${isDarkMode ? 'bg-[#212124] border-[#818181]/20 hover:border-[#818181]/40' : 'bg-white border-gray-200 hover:border-gray-300'}`
             }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-6 flex-1">
-                {/* Drag Handle */}
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                  <GripVertical className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
+                <div className="opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <GripVertical className={`w-5 h-5 transition-colors duration-500 hover:scale-110 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
                 </div>
 
-                {/* Event Icon */}
-                <div className={`w-14 h-14 rounded-xl ${event.color === 'azure' ? 'bg-azure' : event.color === 'pulse' ? 'bg-pulse' : event.color === 'amber' ? 'bg-amber' : 'bg-quantum'} flex items-center justify-center text-white text-xl shadow-md`}>
+                <div className={`w-14 h-14 rounded-xl ${event.color === 'azure' ? 'bg-azure' : event.color === 'pulse' ? 'bg-pulse' : event.color === 'amber' ? 'bg-amber' : 'bg-quantum'} flex items-center justify-center text-white text-xl shadow-lg transition-transform duration-300 group-hover:scale-110`}>
                   {event.icon}
                 </div>
 
-                {/* Event Details */}
                 <div className="flex-1 space-y-3">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h3 className={`font-semibold text-lg transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <h3 className={`font-semibold text-lg transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       {event.title}
                     </h3>
-                    <span className={`text-sm px-3 py-1 rounded-full transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}>
+                    <span className={`text-sm px-3 py-1 rounded-full transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}>
                       {event.bookingsToday} today
                     </span>
                   </div>
-                  <p className={`text-base mb-3 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
+                  <p className={`text-base mb-3 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
                     {event.description}
                   </p>
                   <div className="flex items-center space-x-2">
                     {event.durations.map((duration: string) => (
                       <span
                         key={duration}
-                        className={`px-3 py-1 rounded-full text-sm transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}
+                        className={`px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}
                       >
                         {duration}
                       </span>
@@ -342,35 +419,35 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="flex items-center space-x-3">
                 <Switch 
                   checked={event.isActive}
-                  className="data-[state=checked]:bg-azure"
+                  onCheckedChange={() => handleToggleActive(event.id)}
+                  className="data-[state=checked]:bg-azure transition-all duration-300"
                 />
 
-                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="w-10 h-10 transition-all duration-200 hover:shadow-sm"
+                    className="w-10 h-10 transition-all duration-300 hover:shadow-sm hover:scale-110"
                     onClick={(e) => {e.stopPropagation();}}
                   >
-                    <Eye className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                    <Eye className={`w-5 h-5 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
                   </Button>
 
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="w-10 h-10 transition-all duration-200 hover:shadow-sm relative"
+                    className="w-10 h-10 transition-all duration-300 hover:shadow-sm hover:scale-110 relative group"
                     onClick={(e) => { 
                       e.stopPropagation(); 
                       copyToClipboard(event.slug, `event-${event.id}`); 
                     }}
                   >
-                    <Copy className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                    <Copy className={`w-5 h-5 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
                     {copiedItems[`event-${event.id}`] && (
-                      <span className={`absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
+                      <span className={`absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-bounce ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`}>
                         Copied!
                       </span>
                     )}
@@ -381,27 +458,36 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="w-10 h-10 transition-all duration-200 hover:shadow-sm"
+                        className="w-10 h-10 transition-all duration-300 hover:shadow-sm hover:scale-110"
                         onClick={(e) => {e.stopPropagation();}}
                       >
-                        <MoreHorizontal className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                        <MoreHorizontal className={`w-5 h-5 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className={`transition-colors duration-300 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
-                      <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
+                    <DropdownMenuContent align="end" className={`transition-colors duration-500 shadow-xl ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
+                      <DropdownMenuItem 
+                        onClick={(e) => { e.stopPropagation(); onEventClick(event); }}
+                        className={`transition-colors duration-500 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}
+                      >
                         <Edit className="w-4 h-4 mr-2" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
+                      <DropdownMenuItem 
+                        onClick={(e) => { e.stopPropagation(); handleDuplicateEvent(event); }}
+                        className={`transition-colors duration-500 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}
+                      >
                         <Copy className="w-4 h-4 mr-2" />
                         Duplicate
                       </DropdownMenuItem>
-                      <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
+                      <DropdownMenuItem className={`transition-colors duration-500 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
                         <Code2 className="w-4 h-4 mr-2" />
                         Embed
                       </DropdownMenuItem>
-                      <DropdownMenuSeparator className={`transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20' : 'bg-gray-200'}`} />
-                      <DropdownMenuItem className={`text-red-600 transition-colors duration-300 ${isDarkMode ? 'hover:bg-[#818181]/10' : 'hover:bg-gray-50'}`}>
+                      <DropdownMenuSeparator className={`transition-colors duration-500 ${isDarkMode ? 'bg-[#818181]/20' : 'bg-gray-200'}`} />
+                      <DropdownMenuItem 
+                        onClick={(e) => { e.stopPropagation(); handleDeleteEvent(event.id); }}
+                        className={`text-red-600 transition-colors duration-500 ${isDarkMode ? 'hover:bg-[#818181]/10' : 'hover:bg-gray-50'}`}
+                      >
                         <Trash2 className="w-4 h-4 mr-2" />
                         Delete
                       </DropdownMenuItem>
@@ -414,10 +500,9 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
         ))}
       </div>
 
-      {/* No Results */}
       {filteredEventTypes.length === 0 && (
         <div className="text-center py-16">
-          <p className={`text-lg transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>
+          <p className={`text-lg transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>
             No event types found matching your search.
           </p>
         </div>

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, Grid3X3, Route, Layers, BarChart3, Menu, Bell, Sun, Moon, Settings, User, Map, HelpCircle, LogOut, Plus } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -274,14 +275,14 @@ const Index = () => {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-[#161618]' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen transition-colors duration-500 ${isDarkMode ? 'dark bg-[#161618]' : 'bg-gray-50'}`}>
       {/* Sidebar */}
-      <div className={`fixed left-0 top-0 h-full w-64 border-r z-40 transition-colors duration-300 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
+      <div className={`fixed left-0 top-0 h-full w-64 border-r z-40 transition-all duration-500 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
         {/* Logo */}
-        <div className={`p-6 border-b transition-colors duration-300 ${isDarkMode ? 'border-[#818181]/20' : 'border-gray-100'}`}>
+        <div className={`p-6 border-b transition-colors duration-500 ${isDarkMode ? 'border-[#818181]/20' : 'border-gray-100'}`}>
           <div className="flex items-center space-x-3">
             <img src="https://cdn.prod.website-files.com/5e53d34464688e6f5960a338/682f1bb36cedcb0cd39a7027_Onehash-CalId-logo%20icon.svg" alt="Cal ID" className="w-8 h-8" />
-            <span className={`font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Cal ID</span>
+            <span className={`font-semibold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Cal ID</span>
           </div>
         </div>
 
@@ -291,10 +292,10 @@ const Index = () => {
             <button
               key={id}
               onClick={() => setActiveView(id)}
-              className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+              className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${
                 activeView === id
-                  ? `${isDarkMode ? 'bg-azure/20 text-azure' : 'bg-azure/10 text-azure'}` 
-                  : `${isDarkMode ? 'text-[#818181] hover:text-white hover:bg-[#818181]/10' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'}`
+                  ? `${isDarkMode ? 'bg-azure/20 text-azure' : 'bg-azure/10 text-azure'} transform scale-105` 
+                  : `${isDarkMode ? 'text-[#818181] hover:text-white hover:bg-[#818181]/10' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'} hover:scale-102`
               }`}
             >
               <Icon className="w-4 h-4 flex-shrink-0" />
@@ -305,18 +306,18 @@ const Index = () => {
 
         {/* Bottom Actions */}
         <div className="p-4">
-          <div className={`flex items-center justify-between p-3 rounded-lg transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/10' : 'bg-gray-50'}`}>
+          <div className={`flex items-center justify-between p-3 rounded-lg transition-colors duration-500 ${isDarkMode ? 'bg-[#818181]/10' : 'bg-gray-50'}`}>
             <Button variant="ghost" size="icon" className="w-8 h-8">
-              <Settings className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
+              <Settings className={`w-4 h-4 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
             </Button>
             <div className="flex items-center space-x-2">
-              <Sun className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
+              <Sun className={`w-4 h-4 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
               <Switch 
                 checked={isDarkMode}
                 onCheckedChange={setIsDarkMode}
-                className="data-[state=checked]:bg-azure"
+                className="data-[state=checked]:bg-azure transition-all duration-300"
               />
-              <Moon className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
+              <Moon className={`w-4 h-4 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
             </div>
           </div>
         </div>
@@ -325,17 +326,17 @@ const Index = () => {
       {/* Main Content */}
       <div className="ml-64">
         {/* Header */}
-        <header className={`sticky top-0 z-30 transition-all duration-300 ${
+        <header className={`sticky top-0 z-30 transition-all duration-500 ${
           isScrolled 
-            ? `${isDarkMode ? 'bg-[#212124]/80 backdrop-blur-md border-[#818181]/20' : 'bg-white/80 backdrop-blur-md border-gray-200/50'} border-b` 
+            ? `${isDarkMode ? 'bg-[#212124]/95 backdrop-blur-xl border-[#818181]/20' : 'bg-white/95 backdrop-blur-xl border-gray-200/50'} border-b shadow-lg` 
             : `${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'} border-b`
         }`}>
           <div className="flex items-center justify-between px-8 py-4">
             <div>
-              <h1 className={`text-2xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h1 className={`text-2xl font-semibold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 {getViewTitle()}
               </h1>
-              <p className={`text-sm mt-1 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
+              <p className={`text-sm mt-1 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
                 {getViewDescription()}
               </p>
             </div>
@@ -344,37 +345,38 @@ const Index = () => {
               {/* Notifications */}
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="ghost" size="icon" className="relative">
-                    <Bell className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
+                  <Button variant="ghost" size="icon" className="relative transition-all duration-200 hover:scale-110">
+                    <Bell className={`w-5 h-5 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
+                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-pulse rounded-full animate-ping"></span>
                     <span className="absolute -top-1 -right-1 w-3 h-3 bg-pulse rounded-full"></span>
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent 
-                  className={`w-80 p-0 transition-all duration-300 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}
+                  className={`w-80 p-0 transition-all duration-500 shadow-2xl ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}
                   align="end"
                 >
-                  <div className={`p-4 border-b transition-colors duration-300 ${isDarkMode ? 'border-[#818181]/20' : 'border-gray-100'}`}>
-                    <h3 className={`font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Notifications</h3>
+                  <div className={`p-4 border-b transition-colors duration-500 ${isDarkMode ? 'border-[#818181]/20' : 'border-gray-100'}`}>
+                    <h3 className={`font-semibold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Notifications</h3>
                   </div>
                   <div className="max-h-80 overflow-y-auto p-2 space-y-2">
                     {notifications.map((notification) => (
                       <div
                         key={notification.id}
-                        className={`p-3 rounded-lg cursor-pointer transition-all duration-200 ${
+                        className={`p-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-102 ${
                           isDarkMode 
                             ? 'bg-[#161618] hover:bg-[#818181]/10 border border-[#818181]/20' 
                             : 'bg-white hover:bg-gray-50 border border-gray-100'
                         } ${notification.unread ? 'shadow-sm' : ''}`}
                       >
                         <div className="flex justify-between items-start mb-2">
-                          <h4 className={`font-medium text-sm transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                          <h4 className={`font-medium text-sm transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                             {notification.title}
                           </h4>
-                          <span className={`text-xs transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>
+                          <span className={`text-xs transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>
                             {notification.time}
                           </span>
                         </div>
-                        <p className={`text-sm transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
+                        <p className={`text-sm transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
                           {notification.message}
                         </p>
                       </div>
@@ -386,38 +388,38 @@ const Index = () => {
               {/* Profile Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center">
+                  <Button variant="ghost" size="icon" className="rounded-full transition-all duration-200 hover:scale-110">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center shadow-lg">
                       <span className="text-white font-semibold text-sm">S</span>
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className={`w-48 transition-colors duration-300 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
-                  <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
+                <DropdownMenuContent align="end" className={`w-48 transition-colors duration-500 shadow-xl ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
+                  <DropdownMenuItem className={`transition-colors duration-500 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
                     <User className="w-4 h-4 mr-2" />
                     My Profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
+                  <DropdownMenuItem className={`transition-colors duration-500 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
                     <Moon className="w-4 h-4 mr-2" />
                     Out of Office
                   </DropdownMenuItem>
-                  <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
+                  <DropdownMenuItem className={`transition-colors duration-500 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
                     <Map className="w-4 h-4 mr-2" />
                     Roadmap
                   </DropdownMenuItem>
-                  <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
+                  <DropdownMenuItem className={`transition-colors duration-500 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
                     <HelpCircle className="w-4 h-4 mr-2" />
                     Help
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className={`transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20' : 'bg-gray-200'}`} />
-                  <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
+                  <DropdownMenuSeparator className={`transition-colors duration-500 ${isDarkMode ? 'bg-[#818181]/20' : 'bg-gray-200'}`} />
+                  <DropdownMenuItem className={`transition-colors duration-500 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}>
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Button className="bg-azure hover:bg-azure/90 text-white transition-all duration-200 hover:shadow-md">
+              <Button className="bg-azure hover:bg-azure/90 text-white transition-all duration-300 hover:shadow-lg hover:scale-105">
                 <Plus className="w-4 h-4 mr-2" />
                 New
               </Button>
