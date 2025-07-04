@@ -104,7 +104,7 @@ const MainContent: React.FC<MainContentProps> = ({
   };
 
   return (
-    <div className="p-8">
+    <div className="p-6">
       {renderMainContent()}
     </div>
   );

@@ -14,15 +14,7 @@ const TeamsView: React.FC<TeamsViewProps> = ({ isDarkMode, teams }) => {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className={`text-2xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-          Teams
-        </h1>
-        <p className={`text-sm mt-1 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
-          Manage your teams and collaborate with colleagues.
-        </p>
-      </div>
+    <div className="space-y-6">{/* Removed duplicate header */}
 
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -53,7 +45,14 @@ const TeamsView: React.FC<TeamsViewProps> = ({ isDarkMode, teams }) => {
                   </p>
                 </div>
               </div>
-              <Button variant="ghost" size="icon">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => {
+                  // Manage team settings
+                  console.log('Managing team:', team.name);
+                }}
+              >
                 <Settings className={`w-4 h-4 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
               </Button>
             </div>
@@ -88,7 +87,14 @@ const TeamsView: React.FC<TeamsViewProps> = ({ isDarkMode, teams }) => {
                 </div>
               </div>
 
-              <Button variant="outline" className="w-full">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => {
+                  // Manage team logic
+                  console.log('Managing team:', team.name);
+                }}
+              >
                 Manage Team
               </Button>
             </div>

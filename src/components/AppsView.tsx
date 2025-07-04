@@ -26,15 +26,7 @@ const AppsView: React.FC<AppsViewProps> = ({ isDarkMode }) => {
   ];
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className={`text-2xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-          Apps
-        </h1>
-        <p className={`text-sm mt-1 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
-          Enhance your scheduling with powerful integrations.
-        </p>
-      </div>
+    <div className="space-y-6">{/* Removed duplicate header */}
 
       <div className="relative">
         <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
@@ -73,7 +65,14 @@ const AppsView: React.FC<AppsViewProps> = ({ isDarkMode }) => {
                     <span className={`px-2 py-1 rounded-full text-xs ${app.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
                       {app.status}
                     </span>
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        // Configure app logic
+                        console.log('Configuring app:', app.name);
+                      }}
+                    >
                       Configure
                     </Button>
                   </div>
@@ -107,7 +106,14 @@ const AppsView: React.FC<AppsViewProps> = ({ isDarkMode }) => {
                 <p className={`text-xs mb-3 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
                   {app.description}
                 </p>
-                <Button size="sm" className="w-full bg-azure hover:bg-azure/90 text-white">
+                <Button 
+                  size="sm" 
+                  className="w-full bg-azure hover:bg-azure/90 text-white"
+                  onClick={() => {
+                    // Install app logic
+                    console.log('Installing app:', app.name);
+                  }}
+                >
                   <Plus className="w-3 h-3 mr-1" />
                   Install
                 </Button>

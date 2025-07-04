@@ -199,26 +199,17 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
   };
 
   return (
-    <div className="space-y-8 p-8">
-      {/* Header */}
-      <div>
-        <h1 className={`text-3xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-          Event Types
-        </h1>
-        <p className={`text-base mt-2 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
-          Create events to share for people to book on your calendar.
-        </p>
-      </div>
+    <div className="space-y-6">{/* Removed duplicate header - title is already in main header */}
 
       {/* User Profile Section */}
-      <div className={`rounded-xl p-8 border transition-all duration-500 hover:shadow-xl hover:scale-102 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
+      <div className={`rounded-xl p-6 border transition-all duration-300 hover:shadow-lg hover:scale-102 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center shadow-xl animate-pulse">
-              <span className="text-white font-semibold text-2xl">S</span>
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center shadow-lg">
+              <span className="text-white font-semibold text-xl">S</span>
             </div>
             <div className="space-y-2">
-              <h2 className={`text-2xl font-semibold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h2 className={`text-xl font-semibold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                 Sanskar Yadav
               </h2>
               <div className="flex items-center space-x-3">
@@ -378,32 +369,32 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
             key={event.id}
             draggable
             onClick={(e) => handleEventTileClick(event, e)}
-            className={`group rounded-xl p-6 border cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-2 hover:scale-102 ${
+            className={`group rounded-lg p-4 border cursor-pointer transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:scale-102 ${
               dragOverItem === event.id 
                 ? `${isDarkMode ? 'border-azure/50 bg-azure/10 scale-105' : 'border-azure/30 bg-azure/5 scale-105'}` 
                 : `${isDarkMode ? 'bg-[#212124] border-[#818181]/20 hover:border-[#818181]/40' : 'bg-white border-gray-200 hover:border-gray-300'}`
             }`}
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-6 flex-1">
+              <div className="flex items-center space-x-4 flex-1">
                 <div className="opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <GripVertical className={`w-5 h-5 transition-colors duration-500 hover:scale-110 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
+                  <GripVertical className={`w-4 h-4 transition-colors duration-500 hover:scale-110 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
                 </div>
 
-                <div className={`w-14 h-14 rounded-xl ${event.color === 'azure' ? 'bg-azure' : event.color === 'pulse' ? 'bg-pulse' : event.color === 'amber' ? 'bg-amber' : 'bg-quantum'} flex items-center justify-center text-white text-xl shadow-lg transition-transform duration-300 group-hover:scale-110`}>
+                <div className={`w-10 h-10 rounded-lg ${event.color === 'azure' ? 'bg-azure' : event.color === 'pulse' ? 'bg-pulse' : event.color === 'amber' ? 'bg-amber' : 'bg-quantum'} flex items-center justify-center text-white text-lg shadow-md transition-transform duration-300 group-hover:scale-105`}>
                   {event.icon}
                 </div>
 
-                <div className="flex-1 space-y-3">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <h3 className={`font-semibold text-lg transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                <div className="flex-1 space-y-2">
+                  <div className="flex items-center space-x-3 mb-1">
+                    <h3 className={`font-semibold text-base transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                       {event.title}
                     </h3>
-                    <span className={`text-sm px-3 py-1 rounded-full transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full transition-all duration-300 hover:scale-105 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}>
                       {event.bookingsToday} today
                     </span>
                   </div>
-                  <p className={`text-base mb-3 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
+                  <p className={`text-sm mb-2 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     {event.description}
                   </p>
                   <div className="flex items-center space-x-2">

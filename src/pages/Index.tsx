@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, Grid3X3, Route, Layers, BarChart3, Menu, Bell, Sun, Moon, Settings, User, Map, HelpCircle, LogOut, Plus } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Switch } from '../components/ui/switch';
+import SettingsDialog from '../components/SettingsDialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +24,7 @@ const Index = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showSettings, setShowSettings] = useState(false);
 
   const [eventTypes, setEventTypes] = useState([
     {
@@ -280,9 +282,9 @@ const Index = () => {
       <div className={`fixed left-0 top-0 h-full w-64 border-r z-40 transition-all duration-500 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
         {/* Logo */}
         <div className={`p-6 border-b transition-colors duration-500 ${isDarkMode ? 'border-[#818181]/20' : 'border-gray-100'}`}>
-          <div className="flex items-center space-x-3">
-            <img src="https://cdn.prod.website-files.com/5e53d34464688e6f5960a338/682f1bb36cedcb0cd39a7027_Onehash-CalId-logo%20icon.svg" alt="Cal ID" className="w-8 h-8" />
-            <span className={`font-semibold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Cal ID</span>
+          <div className="flex items-center space-x-4">
+            <img src="https://cdn.prod.website-files.com/5e53d34464688e6f5960a338/682f1bb36cedcb0cd39a7027_Onehash-CalId-logo%20icon.svg" alt="Cal ID" className="w-10 h-10" />
+            <span className={`text-xl font-semibold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>Cal ID</span>
           </div>
         </div>
 
@@ -307,7 +309,7 @@ const Index = () => {
         {/* Bottom Actions */}
         <div className="p-4">
           <div className={`flex items-center justify-between p-3 rounded-lg transition-colors duration-500 ${isDarkMode ? 'bg-[#818181]/10' : 'bg-gray-50'}`}>
-            <Button variant="ghost" size="icon" className="w-8 h-8">
+            <Button variant="ghost" size="icon" className="w-8 h-8" onClick={() => setShowSettings(true)}>
               <Settings className={`w-4 h-4 transition-colors duration-500 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
             </Button>
             <div className="flex items-center space-x-2">
@@ -439,6 +441,12 @@ const Index = () => {
           setSearchQuery={setSearchQuery}
         />
       </div>
+
+      <SettingsDialog 
+        open={showSettings}
+        onOpenChange={setShowSettings}
+        isDarkMode={isDarkMode}
+      />
     </div>
   );
 };

@@ -70,13 +70,13 @@
   }
 
   .dark {
-    --background: 222 87% 8.5%;
+    --background: 222 84% 4.9%;
     --foreground: 210 40% 98%;
 
-    --card: 222 84% 9.5%;
+    --card: 222 84% 5.5%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 84% 9.5%;
+    --popover: 222 84% 5.5%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 207 100% 45%;
@@ -85,7 +85,7 @@
     --secondary: 5 75% 55%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 217 32% 15%;
+    --muted: 217 32% 8%;
     --muted-foreground: 215 20% 65%;
 
     --accent: 41 100% 48%;
@@ -97,8 +97,8 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 217 32% 15%;
-    --input: 217 32% 15%;
+    --border: 217 32% 8%;
+    --input: 217 32% 8%;
     --ring: 207 100% 45%;
   }
 }
@@ -213,21 +213,21 @@
 
   /* Link containers with grey background */
   .link-container {
-    @apply px-3 py-2 rounded-lg transition-all duration-300;
-    background: rgba(156, 163, 175, 0.1);
+    @apply px-2 py-1 rounded-md transition-all duration-300;
+    background: rgba(156, 163, 175, 0.15);
   }
 
   .dark .link-container {
-    background: rgba(129, 129, 129, 0.15);
+    background: rgba(129, 129, 129, 0.2);
   }
 
   .link-container:hover {
     @apply scale-105;
-    background: rgba(156, 163, 175, 0.2);
+    background: rgba(156, 163, 175, 0.25);
   }
 
   .dark .link-container:hover {
-    background: rgba(129, 129, 129, 0.25);
+    background: rgba(129, 129, 129, 0.3);
   }
 }
 

@@ -37,15 +37,7 @@ const AvailabilityView: React.FC<AvailabilityViewProps> = ({ isDarkMode }) => {
   ];
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className={`text-2xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-          Availability
-        </h1>
-        <p className={`text-sm mt-1 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`}>
-          Configure when you're available for meetings.
-        </p>
-      </div>
+    <div className="space-y-6">{/* Removed duplicate header */}
 
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
