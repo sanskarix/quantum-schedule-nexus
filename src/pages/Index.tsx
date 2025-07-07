@@ -21,7 +21,7 @@ const Index = () => {
     description: 'Witness innovation in action! Reserve a time for a personalized demo of our next-gen scheduler (THIS SITE)',
     durations: ['30m', '45m'],
     isActive: true,
-    color: 'azure',
+    color: 'neutral',
     icon: '⚡',
     bookingsToday: 3
   }, {
@@ -31,7 +31,7 @@ const Index = () => {
     description: "Let's chat about how your skills can be an asset for our team. No stress, just good vibes and great questions!",
     durations: ['30m', '60m'],
     isActive: true,
-    color: 'pulse',
+    color: 'neutral',
     icon: '👤',
     bookingsToday: 1
   }, {
@@ -41,7 +41,7 @@ const Index = () => {
     description: "The essence of Product Hunt reflects in communities- Select a time suitable for you, and let's talk products!",
     durations: ['15m', '30m', '45m', '60m'],
     isActive: true,
-    color: 'amber',
+    color: 'neutral',
     icon: '💬',
     bookingsToday: 5
   }, {
@@ -51,7 +51,7 @@ const Index = () => {
     description: "Open Agenda! Let's brainstorm over coffee or talk about your favorite singer. Whatever it is, I'm all ears! 🍵",
     durations: ['15m', '30m', '60m'],
     isActive: true,
-    color: 'quantum',
+    color: 'neutral',
     icon: '☕',
     bookingsToday: 2
   }, {
@@ -61,7 +61,7 @@ const Index = () => {
     description: "Deep dive into technical architecture and code review sessions for your projects.",
     durations: ['45m', '60m'],
     isActive: true,
-    color: 'azure',
+    color: 'neutral',
     icon: '⚙️',
     bookingsToday: 0
   }, {
@@ -71,7 +71,7 @@ const Index = () => {
     description: "Plan your roadmap and discuss strategic decisions for your business growth.",
     durations: ['30m', '60m', '90m'],
     isActive: true,
-    color: 'pulse',
+    color: 'neutral',
     icon: '📊',
     bookingsToday: 1
   }, {
@@ -81,7 +81,7 @@ const Index = () => {
     description: "Quick sync meetings to align team priorities and discuss blockers.",
     durations: ['15m', '30m'],
     isActive: true,
-    color: 'quantum',
+    color: 'neutral',
     icon: '🔄',
     bookingsToday: 4
   }, {
@@ -91,7 +91,7 @@ const Index = () => {
     description: "Welcome new clients and walk them through our processes and expectations.",
     durations: ['45m', '60m'],
     isActive: true,
-    color: 'amber',
+    color: 'neutral',
     icon: '🎯',
     bookingsToday: 2
   }, {
@@ -101,23 +101,24 @@ const Index = () => {
     description: "Collaborative design sessions to review mockups, prototypes and user experience.",
     durations: ['30m', '45m', '60m'],
     isActive: true,
-    color: 'azure',
+    color: 'neutral',
     icon: '🎨',
     bookingsToday: 1
   }]);
+  
   const teams = [{
     id: 1,
     name: 'Design Team',
     slug: 'cal.id/design-team',
     logo: '🎨',
-    color: 'amber',
+    color: 'neutral',
     eventTypes: [{
       id: 101,
       title: 'Design Critique',
       description: 'Review and critique design work',
       durations: ['30m', '45m'],
       isActive: true,
-      color: 'amber',
+      color: 'neutral',
       icon: '🎨',
       bookingsToday: 2
     }, {
@@ -126,7 +127,7 @@ const Index = () => {
       description: 'Conduct user interviews and research',
       durations: ['60m'],
       isActive: true,
-      color: 'azure',
+      color: 'neutral',
       icon: '🔍',
       bookingsToday: 1
     }, {
@@ -135,7 +136,7 @@ const Index = () => {
       description: 'Review and update design system components',
       durations: ['45m'],
       isActive: true,
-      color: 'pulse',
+      color: 'neutral',
       icon: '📐',
       bookingsToday: 0
     }, {
@@ -144,7 +145,7 @@ const Index = () => {
       description: 'Review designer portfolios and work',
       durations: ['30m', '60m'],
       isActive: true,
-      color: 'quantum',
+      color: 'neutral',
       icon: '📁',
       bookingsToday: 3
     }, {
@@ -153,7 +154,7 @@ const Index = () => {
       description: 'Collaborate on brand identity and guidelines',
       durations: ['90m'],
       isActive: true,
-      color: 'amber',
+      color: 'neutral',
       icon: '🎪',
       bookingsToday: 1
     }, {
@@ -162,7 +163,7 @@ const Index = () => {
       description: 'Create and review wireframes together',
       durations: ['45m', '60m'],
       isActive: true,
-      color: 'azure',
+      color: 'neutral',
       icon: '📱',
       bookingsToday: 2
     }, {
@@ -171,7 +172,7 @@ const Index = () => {
       description: 'Hand off designs to development team',
       durations: ['30m'],
       isActive: true,
-      color: 'pulse',
+      color: 'neutral',
       icon: '🤝',
       bookingsToday: 1
     }]
@@ -180,14 +181,14 @@ const Index = () => {
     name: 'Engineering',
     slug: 'cal.id/engineering',
     logo: '⚙️',
-    color: 'azure',
+    color: 'neutral',
     eventTypes: [{
       id: 201,
       title: 'Code Review',
       description: 'Review pull requests and code quality',
       durations: ['30m', '45m'],
       isActive: true,
-      color: 'azure',
+      color: 'neutral',
       icon: '👁️',
       bookingsToday: 4
     }, {
@@ -196,7 +197,7 @@ const Index = () => {
       description: 'Discuss system architecture and design',
       durations: ['60m', '90m'],
       isActive: true,
-      color: 'pulse',
+      color: 'neutral',
       icon: '🏗️',
       bookingsToday: 2
     }, {
@@ -205,7 +206,7 @@ const Index = () => {
       description: 'Review and prioritize bugs and issues',
       durations: ['30m'],
       isActive: true,
-      color: 'quantum',
+      color: 'neutral',
       icon: '🐛',
       bookingsToday: 1
     }, {
@@ -214,7 +215,7 @@ const Index = () => {
       description: 'Plan upcoming sprint and tasks',
       durations: ['60m'],
       isActive: true,
-      color: 'amber',
+      color: 'neutral',
       icon: '📋',
       bookingsToday: 0
     }, {
@@ -223,7 +224,7 @@ const Index = () => {
       description: 'Conduct technical interviews for candidates',
       durations: ['45m', '60m'],
       isActive: true,
-      color: 'azure',
+      color: 'neutral',
       icon: '💻',
       bookingsToday: 3
     }, {
@@ -232,7 +233,7 @@ const Index = () => {
       description: 'Collaborative coding session',
       durations: ['60m', '90m'],
       isActive: true,
-      color: 'pulse',
+      color: 'neutral',
       icon: '👥',
       bookingsToday: 2
     }, {
@@ -241,7 +242,7 @@ const Index = () => {
       description: 'Review and plan technical debt improvements',
       durations: ['45m'],
       isActive: true,
-      color: 'quantum',
+      color: 'neutral',
       icon: '🔧',
       bookingsToday: 1
     }]
@@ -250,14 +251,14 @@ const Index = () => {
     name: 'Marketing',
     slug: 'cal.id/marketing',
     logo: '📈',
-    color: 'pulse',
+    color: 'neutral',
     eventTypes: [{
       id: 301,
       title: 'Campaign Review',
       description: 'Review marketing campaign performance',
       durations: ['30m', '45m'],
       isActive: true,
-      color: 'pulse',
+      color: 'neutral',
       icon: '📊',
       bookingsToday: 3
     }, {
@@ -266,7 +267,7 @@ const Index = () => {
       description: 'Plan content calendar and strategy',
       durations: ['60m'],
       isActive: true,
-      color: 'amber',
+      color: 'neutral',
       icon: '📝',
       bookingsToday: 2
     }, {
@@ -275,7 +276,7 @@ const Index = () => {
       description: 'Review and update brand guidelines',
       durations: ['45m'],
       isActive: true,
-      color: 'azure',
+      color: 'neutral',
       icon: '🎨',
       bookingsToday: 1
     }, {
@@ -284,7 +285,7 @@ const Index = () => {
       description: 'Plan social media content and strategy',
       durations: ['30m', '45m'],
       isActive: true,
-      color: 'quantum',
+      color: 'neutral',
       icon: '📱',
       bookingsToday: 4
     }, {
@@ -293,7 +294,7 @@ const Index = () => {
       description: 'Review marketing analytics and metrics',
       durations: ['30m'],
       isActive: true,
-      color: 'pulse',
+      color: 'neutral',
       icon: '📈',
       bookingsToday: 2
     }, {
@@ -302,7 +303,7 @@ const Index = () => {
       description: 'Discuss potential partnerships and collaborations',
       durations: ['45m', '60m'],
       isActive: true,
-      color: 'amber',
+      color: 'neutral',
       icon: '🤝',
       bookingsToday: 1
     }, {
@@ -311,7 +312,7 @@ const Index = () => {
       description: 'Plan public relations and media strategy',
       durations: ['60m'],
       isActive: true,
-      color: 'azure',
+      color: 'neutral',
       icon: '📢',
       bookingsToday: 0
     }]
@@ -320,14 +321,14 @@ const Index = () => {
     name: 'Sales',
     slug: 'cal.id/sales',
     logo: '💼',
-    color: 'quantum',
+    color: 'neutral',
     eventTypes: [{
       id: 401,
       title: 'Sales Demo',
       description: 'Product demonstration for prospects',
       durations: ['30m', '45m'],
       isActive: true,
-      color: 'quantum',
+      color: 'neutral',
       icon: '💼',
       bookingsToday: 5
     }, {
@@ -336,7 +337,7 @@ const Index = () => {
       description: 'Initial discovery and needs assessment',
       durations: ['30m'],
       isActive: true,
-      color: 'azure',
+      color: 'neutral',
       icon: '🔍',
       bookingsToday: 3
     }, {
@@ -345,7 +346,7 @@ const Index = () => {
       description: 'Review sales proposals with prospects',
       durations: ['45m', '60m'],
       isActive: true,
-      color: 'pulse',
+      color: 'neutral',
       icon: '📋',
       bookingsToday: 2
     }, {
@@ -354,7 +355,7 @@ const Index = () => {
       description: 'Negotiate contract terms and pricing',
       durations: ['60m'],
       isActive: true,
-      color: 'amber',
+      color: 'neutral',
       icon: '⚖️',
       bookingsToday: 1
     }, {
@@ -363,7 +364,7 @@ const Index = () => {
       description: 'Regular check-ins with existing customers',
       durations: ['15m', '30m'],
       isActive: true,
-      color: 'quantum',
+      color: 'neutral',
       icon: '✅',
       bookingsToday: 4
     }, {
@@ -372,7 +373,7 @@ const Index = () => {
       description: 'Training sessions for sales team',
       durations: ['60m', '90m'],
       isActive: true,
-      color: 'azure',
+      color: 'neutral',
       icon: '🎓',
       bookingsToday: 1
     }, {
@@ -381,11 +382,12 @@ const Index = () => {
       description: 'Review sales pipeline and opportunities',
       durations: ['45m'],
       isActive: true,
-      color: 'pulse',
+      color: 'neutral',
       icon: '📊',
       bookingsToday: 2
     }]
   }];
+  
   const notifications = [
     {
       id: 1,
@@ -471,7 +473,7 @@ const Index = () => {
     <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-[#161618]' : 'bg-gray-50'}`}>
       {/* Sidebar */}
       <div className={`fixed left-0 top-0 h-full w-64 border-r z-40 transition-all duration-300 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
-        {/* Logo - Made bigger */}
+        {/* Logo */}
         <div className={`p-6 border-b transition-colors duration-300 ${isDarkMode ? 'border-[#818181]/20' : 'border-gray-100'}`}>
           <div className="flex items-center space-x-4">
             <img src="https://cdn.prod.website-files.com/5e53d34464688e6f5960a338/682f1bb36cedcb0cd39a7027_Onehash-CalId-logo%20icon.svg" alt="Cal ID" className="w-12 h-12" />
@@ -489,8 +491,8 @@ const Index = () => {
               onClick={() => setActiveView(id)}
               className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 activeView === id 
-                  ? `${isDarkMode ? 'bg-azure/20 text-azure' : 'bg-azure/10 text-azure'} transform scale-102`
-                  : `${isDarkMode ? 'text-[#818181] hover:text-white hover:bg-[#818181]/10' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'} hover:scale-101`
+                  ? `${isDarkMode ? 'bg-[#C9D9E3]/20 text-[#C9D9E3]' : 'bg-[#C9D9E3]/10 text-[#C9D9E3]'} transform scale-[1.02]`
+                  : `${isDarkMode ? 'text-[#818181] hover:text-white hover:bg-[#818181]/10' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'} hover:scale-[1.01]`
               }`}
               style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
             >
@@ -500,8 +502,8 @@ const Index = () => {
           ))}
         </nav>
 
-        {/* Bottom Actions */}
-        <div className="p-4">
+        {/* Bottom Actions - Moved to bottom */}
+        <div className="p-4 border-t border-gray-200 dark:border-[#818181]/20">
           <div className={`flex items-center justify-between p-3 rounded-lg transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/10' : 'bg-gray-50'}`}>
             <Button variant="ghost" size="icon" className="w-8 h-8" onClick={() => setShowSettings(true)}>
               <Settings className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
@@ -511,7 +513,7 @@ const Index = () => {
               <Switch 
                 checked={isDarkMode} 
                 onCheckedChange={setIsDarkMode} 
-                className="data-[state=checked]:bg-azure transition-all duration-200" 
+                className="data-[state=checked]:bg-[#C9D9E3] transition-all duration-200" 
               />
               <Moon className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
             </div>
@@ -524,8 +526,8 @@ const Index = () => {
         {/* Header - More transparent */}
         <header className={`sticky top-0 z-30 transition-all duration-300 ${
           isScrolled 
-            ? `${isDarkMode ? 'bg-[#212124]/60 backdrop-blur-xl border-[#818181]/10' : 'bg-white/60 backdrop-blur-xl border-gray-200/30'} border-b shadow-sm`
-            : `${isDarkMode ? 'bg-[#212124]/60 backdrop-blur-xl border-[#818181]/10' : 'bg-white/60 backdrop-blur-xl border-gray-200/30'} border-b`
+            ? `${isDarkMode ? 'bg-[#212124]/40 backdrop-blur-xl border-[#818181]/10' : 'bg-white/40 backdrop-blur-xl border-gray-200/30'} border-b shadow-sm`
+            : `${isDarkMode ? 'bg-[#212124]/40 backdrop-blur-xl border-[#818181]/10' : 'bg-white/40 backdrop-blur-xl border-gray-200/30'} border-b`
         }`}>
           <div className="flex items-center justify-between px-6 py-4">
             <div>
@@ -538,21 +540,21 @@ const Index = () => {
             </div>
             
             <div className="flex items-center space-x-3">
-              {/* Notifications - Simplified animation */}
+              {/* Notifications */}
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="ghost" size="icon" className="relative transition-all duration-150">
+                  <Button variant="ghost" size="icon" className="relative transition-all duration-200">
                     <Bell className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} />
-                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-pulse rounded-full"></span>
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#C9D9E3] rounded-full"></span>
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className={`w-80 p-0 transition-all duration-150 shadow-lg ${isDarkMode ? 'bg-[#212124]/90 backdrop-blur-xl border-[#818181]/20' : 'bg-white/90 backdrop-blur-xl border-gray-200'}`} align="end">
+                <PopoverContent className={`w-80 p-0 transition-all duration-100 shadow-lg ${isDarkMode ? 'bg-[#212124]/90 backdrop-blur-xl border-[#818181]/20' : 'bg-white/90 backdrop-blur-xl border-gray-200'}`} align="end">
                   <div className={`p-4 border-b transition-colors duration-300 ${isDarkMode ? 'border-[#818181]/20' : 'border-gray-100'}`}>
                     <h3 className={`font-semibold text-sm transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>Notifications</h3>
                   </div>
                   <div className="max-h-80 overflow-y-auto p-2 space-y-2">
                     {notifications.map(notification => (
-                      <div key={notification.id} className={`p-3 rounded-lg cursor-pointer transition-all duration-150 ${isDarkMode ? 'bg-[#161618] hover:bg-[#818181]/10 border border-[#818181]/20' : 'bg-white hover:bg-gray-50 border border-gray-100'} ${notification.unread ? 'shadow-sm' : ''}`}>
+                      <div key={notification.id} className={`p-3 rounded-lg cursor-pointer transition-all duration-200 ${isDarkMode ? 'bg-[#161618] hover:bg-[#818181]/10 border border-[#818181]/20' : 'bg-white hover:bg-gray-50 border border-gray-100'} ${notification.unread ? 'shadow-sm' : ''}`}>
                         <div className="flex justify-between items-start mb-2">
                           <h4 className={`font-medium text-sm transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                             {notification.title}
@@ -570,34 +572,34 @@ const Index = () => {
                 </PopoverContent>
               </Popover>
 
-              {/* Profile Dropdown - Simplified animation */}
+              {/* Profile Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full transition-all duration-150">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center shadow-md">
+                  <Button variant="ghost" size="icon" className="rounded-full transition-all duration-200">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C9D9E3] to-[#A8B8C8] flex items-center justify-center shadow-md">
                       <span className="text-white font-semibold text-sm" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>S</span>
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className={`w-48 transition-colors duration-150 shadow-lg ${isDarkMode ? 'bg-[#212124]/90 backdrop-blur-xl border-[#818181]/20' : 'bg-white/90 backdrop-blur-xl border-gray-200'}`}>
-                  <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                <DropdownMenuContent align="end" className={`w-48 transition-all duration-100 shadow-lg ${isDarkMode ? 'bg-[#212124]/90 backdrop-blur-xl border-[#818181]/20' : 'bg-white/90 backdrop-blur-xl border-gray-200'}`}>
+                  <DropdownMenuItem className={`transition-colors duration-200 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     <User className="w-4 h-4 mr-2" />
                     My Profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                  <DropdownMenuItem className={`transition-colors duration-200 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     <Moon className="w-4 h-4 mr-2" />
                     Out of Office
                   </DropdownMenuItem>
-                  <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                  <DropdownMenuItem className={`transition-colors duration-200 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     <Map className="w-4 h-4 mr-2" />
                     Roadmap
                   </DropdownMenuItem>
-                  <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                  <DropdownMenuItem className={`transition-colors duration-200 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     <HelpCircle className="w-4 h-4 mr-2" />
                     Help
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className={`transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20' : 'bg-gray-200'}`} />
-                  <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                  <DropdownMenuItem className={`transition-colors duration-200 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign Out
                   </DropdownMenuItem>
