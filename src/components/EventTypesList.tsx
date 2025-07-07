@@ -1,4 +1,3 @@
-
 import React, { useRef, useState } from 'react';
 import { Search, Plus, TrendingUp, TrendingDown, Copy, GripVertical, Eye, MoreHorizontal, Edit, Code2, Trash2, ChevronDown, ChevronUp, Calendar, Clock, Users, Grid3X3, Route, Layers, BarChart3 } from 'lucide-react';
 import { Button } from './ui/button';
@@ -441,7 +440,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                 {team.name}
               </DropdownMenuItem>
             ))}
-          </DropdownContent>
+          </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
