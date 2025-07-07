@@ -5,6 +5,7 @@ import { Switch } from '../components/ui/switch';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '../components/ui/dropdown-menu';
 import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popover';
 import MainContent from '../components/MainContent';
+import SettingsDialog from '../components/SettingsDialog';
 
 const Index = () => {
   const [activeView, setActiveView] = useState('event-types');
