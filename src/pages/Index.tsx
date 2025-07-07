@@ -468,7 +468,7 @@ const Index = () => {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-[#151515]' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-[#0f0f0f]' : 'bg-gray-50'}`}>
       {/* Sidebar */}
       <div className={`fixed left-0 top-0 h-full w-64 border-r z-40 transition-all duration-300 ${isDarkMode ? 'bg-[#1a1a1a] border-gray-800' : 'bg-white border-gray-200'} flex flex-col`}>
         {/* Logo */}
@@ -490,7 +490,7 @@ const Index = () => {
               className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 activeView === id 
                   ? `${isDarkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-50 text-blue-600'} transform scale-[1.02]`
-                  : `${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'} hover:scale-[1.01]`
+                  : `${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-gray-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'} hover:scale-[1.01]`
               }`}
               style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
             >
@@ -500,64 +500,67 @@ const Index = () => {
           ))}
         </nav>
 
-        {/* Bottom Actions - Moved here */}
-        <div className="p-4 border-t border-gray-800">
-          <div className={`flex items-center justify-between p-3 rounded-xl transition-colors duration-300 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+        {/* Bottom Actions - Two separate sections */}
+        <div className="p-4 space-y-3">
+          {/* Settings Section */}
+          <div className={`flex items-center justify-center p-3 rounded-xl transition-colors duration-300 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
             <Button variant="ghost" size="icon" className="w-8 h-8" onClick={() => setShowSettings(true)}>
-              <Settings className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
+              <Settings className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
             </Button>
-            <div className="flex items-center space-x-2">
-              <Sun className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
-              <Switch 
-                checked={isDarkMode} 
-                onCheckedChange={setIsDarkMode} 
-                className="data-[state=checked]:bg-[#C9D9E3] transition-all duration-200" 
-              />
-              <Moon className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
-            </div>
+          </div>
+          
+          {/* Dark Mode Toggle Section */}
+          <div className={`flex items-center justify-center space-x-2 p-3 rounded-xl transition-colors duration-300 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+            <Sun className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
+            <Switch 
+              checked={isDarkMode} 
+              onCheckedChange={setIsDarkMode} 
+              className="data-[state=checked]:bg-[#007ee5] transition-all duration-200" 
+            />
+            <Moon className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
           </div>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="ml-64">
-        {/* Header - More transparent */}
+        {/* Header */}
         <header className={`sticky top-0 z-30 transition-all duration-300 ${isDarkMode ? 'bg-[#1a1a1a]/80 backdrop-blur-xl border-gray-800/50' : 'bg-white/80 backdrop-blur-xl border-gray-200/50'} border-b`}>
           <div className="flex items-center justify-between px-6 py-4">
             <div>
               <h1 className={`text-xl font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                 {getViewTitle()}
               </h1>
-              <p className={`text-sm mt-1 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+              <p className={`text-sm mt-1 transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                 {getViewDescription()}
               </p>
             </div>
             
             <div className="flex items-center space-x-3">
-              {/* Notifications - Minimal animations */}
+              {/* Notifications */}
               <Popover>
                 <PopoverTrigger asChild>
                   <Button variant="ghost" size="icon" className="relative">
-                    <Bell className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} />
+                    <Bell className={`w-5 h-5 transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
                     <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className={`w-80 p-0 shadow-xl rounded-2xl ${isDarkMode ? 'bg-[#1a1a1a] border-gray-800' : 'bg-white border-gray-200'}`} align="end">
-                  <div className={`p-4 border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-100'}`}>
+                <PopoverContent className={`w-80 p-0 shadow-xl rounded-2xl ${isDarkMode ? 'bg-[#1e1e1e] border-gray-700' : 'bg-white border-gray-200'}`} align="end">
+                  <div className={`p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-100'}`}>
                     <h3 className={`font-semibold text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>Notifications</h3>
                   </div>
                   <div className="max-h-80 overflow-y-auto p-2 space-y-2">
                     {notifications.map(notification => (
-                      <div key={notification.id} className={`p-3 rounded-xl cursor-pointer ${isDarkMode ? 'bg-[#151515] hover:bg-gray-800 border border-gray-800' : 'bg-white hover:bg-gray-50 border border-gray-100'} ${notification.unread ? 'shadow-sm' : ''}`}>
+                      <div key={notification.id} className={`p-3 rounded-xl cursor-pointer ${isDarkMode ? 'bg-[#151515] hover:bg-gray-800 border border-gray-700' : 'bg-white hover:bg-gray-50 border border-gray-100'} ${notification.unread ? 'shadow-sm' : ''}`}>
                         <div className="flex justify-between items-start mb-2">
                           <h4 className={`font-medium text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                             {notification.title}
                           </h4>
-                          <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                          <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                             {notification.time}
                           </span>
                         </div>
-                        <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                        <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                           {notification.message}
                         </p>
                       </div>
@@ -566,7 +569,7 @@ const Index = () => {
                 </PopoverContent>
               </Popover>
 
-              {/* Profile Dropdown - Minimal animations */}
+              {/* Profile Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="rounded-full">
@@ -575,25 +578,25 @@ const Index = () => {
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className={`w-48 shadow-xl rounded-2xl ${isDarkMode ? 'bg-[#1a1a1a] border-gray-800' : 'bg-white border-gray-200'}`}>
-                  <DropdownMenuItem className={`rounded-xl m-1 ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                <DropdownMenuContent align="end" className={`w-48 shadow-xl rounded-2xl ${isDarkMode ? 'bg-[#1e1e1e] border-gray-700' : 'bg-white border-gray-200'}`}>
+                  <DropdownMenuItem className={`rounded-xl m-1 ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     <User className="w-4 h-4 mr-2" />
                     My Profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem className={`rounded-xl m-1 ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                  <DropdownMenuItem className={`rounded-xl m-1 ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     <Moon className="w-4 h-4 mr-2" />
                     Out of Office
                   </DropdownMenuItem>
-                  <DropdownMenuItem className={`rounded-xl m-1 ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                  <DropdownMenuItem className={`rounded-xl m-1 ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     <Map className="w-4 h-4 mr-2" />
                     Roadmap
                   </DropdownMenuItem>
-                  <DropdownMenuItem className={`rounded-xl m-1 ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                  <DropdownMenuItem className={`rounded-xl m-1 ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     <HelpCircle className="w-4 h-4 mr-2" />
                     Help
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`} />
-                  <DropdownMenuItem className={`rounded-xl m-1 ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                  <DropdownMenuSeparator className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+                  <DropdownMenuItem className={`rounded-xl m-1 ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign Out
                   </DropdownMenuItem>

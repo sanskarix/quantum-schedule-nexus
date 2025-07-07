@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -70,10 +69,10 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Brand colors
-				azure: '#007EE5',
+				// Brand colors with #007ee5 as primary blue
+				azure: '#007ee5',
 				pulse: '#F1352C',
-				amber: '#F9A400',
+				amber: '#f1f1f1',
 				quantum: '#008C44'
 			},
 			fontFamily: {
