@@ -1,6 +1,6 @@
 
 import React, { useRef, useState } from 'react';
-import { Search, Plus, TrendingUp, TrendingDown, Copy, GripVertical, Eye, MoreHorizontal, Edit, Code2, Trash2, ChevronDown } from 'lucide-react';
+import { Search, Plus, TrendingUp, TrendingDown, Copy, GripVertical, Eye, MoreHorizontal, Edit, Code2, Trash2, ChevronDown, ChevronUp, Calendar, Clock, Users, Grid3X3, Route, Layers, BarChart3 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Switch } from './ui/switch';
 import {
@@ -63,6 +63,18 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
 
   const durationOptions = ['15m', '30m', '45m', '60m', '90m'];
 
+  const eventTypeIcons = {
+    1: Calendar,
+    2: Users,
+    3: Grid3X3,
+    4: Clock,
+    5: Route,
+    6: BarChart3,
+    7: Layers,
+    8: Users,
+    9: Edit
+  };
+
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedItems(prev => ({ ...prev, [id]: true }));
@@ -75,7 +87,6 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
     setSelectedTeam(selectedTeam?.id === team.id ? null : team);
   };
 
-  // Click outside handler to deselect team
   const handleContainerClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (!target.closest('.team-card') && !target.closest('button')) {
@@ -97,12 +108,12 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
     const newEvent = {
       id: Date.now(),
       title: newEventForm.title || 'New Event Type',
-      slug: `/sanskar/${newEventForm.slug}`,
+      slug: `/${selectedCreateTeam ? selectedCreateTeam.name.toLowerCase().replace(' ', '') : 'sanskar'}/${newEventForm.slug}`,
       description: newEventForm.description,
       durations: newEventForm.selectedDurations,
       isActive: true,
-      color: 'azure',
-      icon: '📅',
+      color: 'neutral',
+      icon: Calendar,
       bookingsToday: 0
     };
     
@@ -183,31 +194,101 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
     }));
   };
 
+  const handleMoveEvent = (eventId: number, direction: 'up' | 'down') => {
+    const events = selectedTeam ? selectedTeam.eventTypes : eventTypes;
+    const currentIndex = events.findIndex((e: any) => e.id === eventId);
+    
+    if (direction === 'up' && currentIndex > 0) {
+      const newEvents = [...events];
+      [newEvents[currentIndex], newEvents[currentIndex - 1]] = [newEvents[currentIndex - 1], newEvents[currentIndex]];
+      
+      if (selectedTeam) {
+        setSelectedTeam({ ...selectedTeam, eventTypes: newEvents });
+      } else {
+        setEventTypes(newEvents);
+      }
+    } else if (direction === 'down' && currentIndex < events.length - 1) {
+      const newEvents = [...events];
+      [newEvents[currentIndex], newEvents[currentIndex + 1]] = [newEvents[currentIndex + 1], newEvents[currentIndex]];
+      
+      if (selectedTeam) {
+        setSelectedTeam({ ...selectedTeam, eventTypes: newEvents });
+      } else {
+        setEventTypes(newEvents);
+      }
+    }
+  };
+
+  const handleDragStart = (e: React.DragEvent, eventId: number) => {
+    setDraggedItem(eventId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent, eventId: number) => {
+    e.preventDefault();
+    setDragOverItem(eventId);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedItem(null);
+    setDragOverItem(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, dropEventId: number) => {
+    e.preventDefault();
+    
+    if (!draggedItem || draggedItem === dropEventId) return;
+    
+    const events = selectedTeam ? selectedTeam.eventTypes : eventTypes;
+    const draggedIndex = events.findIndex((e: any) => e.id === draggedItem);
+    const dropIndex = events.findIndex((e: any) => e.id === dropEventId);
+    
+    const newEvents = [...events];
+    const draggedEvent = newEvents.splice(draggedIndex, 1)[0];
+    newEvents.splice(dropIndex, 0, draggedEvent);
+    
+    if (selectedTeam) {
+      setSelectedTeam({ ...selectedTeam, eventTypes: newEvents });
+    } else {
+      setEventTypes(newEvents);
+    }
+    
+    setDraggedItem(null);
+    setDragOverItem(null);
+  };
+
+  const getUrlPrefix = () => {
+    if (selectedCreateTeam) {
+      return `cal.id/${selectedCreateTeam.name.toLowerCase().replace(' ', '')}`;
+    }
+    return 'cal.id/sanskar';
+  };
+
   return (
-    <div className="space-y-4" onClick={handleContainerClick}>
-      {/* User Profile Section */}
-      <div className={`rounded-xl p-4 border transition-all duration-150 hover:shadow-md ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
+    <div className="space-y-6" onClick={handleContainerClick}>
+      {/* User Profile Section - No hover animations */}
+      <div className={`rounded-2xl p-6 border ${isDarkMode ? 'bg-[#1a1a1a] border-gray-800' : 'bg-white border-gray-200'}`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-azure to-quantum flex items-center justify-center shadow-md">
-              <span className="text-white font-semibold text-lg" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>S</span>
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+              <span className="text-white font-semibold text-xl" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>S</span>
             </div>
-            <div className="space-y-1">
-              <h2 className={`text-lg font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+            <div className="space-y-2">
+              <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                 Sanskar Yadav
               </h2>
               <div className="flex items-center space-x-2">
-                <div className={`link-container flex items-center space-x-2 transition-all duration-150 hover:scale-105`}>
-                  <span className={`text-sm font-mono transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                <div className={`link-container flex items-center space-x-2 px-2 py-1 rounded-md ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                  <span className={`text-xs font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     cal.id/sanskar
                   </span>
                   <button 
                     onClick={() => copyToClipboard('cal.id/sanskar', 'profile')}
                     className="relative group"
                   >
-                    <Copy className={`w-3 h-3 hover:text-gray-700 transition-all duration-150 group-hover:scale-110 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
+                    <Copy className={`w-3 h-3 hover:text-gray-700 transition-colors ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
                     {copiedItems.profile && (
-                      <span className={`absolute -top-6 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                      <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-900 text-white'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                         Copied!
                       </span>
                     )}
@@ -217,12 +298,12 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
             </div>
           </div>
 
-          {/* Enhanced Stats */}
-          <div className="flex space-x-6">
+          {/* Stats with hover animations */}
+          <div className="flex space-x-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center space-y-1 transform transition-all duration-150 hover:scale-105">
+              <div key={index} className="text-center space-y-1 transition-transform duration-200 hover:scale-105">
                 <div className="flex items-center justify-center space-x-1 mb-1">
-                  <span className={`text-2xl font-bold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                  <span className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                     {stat.value}
                   </span>
                   {stat.trend === 'up' ? (
@@ -231,7 +312,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                     <TrendingDown className="w-4 h-4 text-red-500" />
                   )}
                 </div>
-                <p className={`text-xs font-medium transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                <p className={`text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                   {stat.label}
                 </p>
                 <p className={`text-xs font-semibold ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
@@ -243,28 +324,28 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
         </div>
       </div>
 
-      {/* Teams Section */}
-      <div className="space-y-3">
+      {/* Teams Section with hover animations */}
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <h2 className={`text-lg font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+            <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
               Your Teams
             </h2>
             {selectedTeam && (
               <>
-                <span className={`text-lg transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`}>•</span>
-                <span className={`text-lg font-medium transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-700'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                <span className={`text-lg ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>•</span>
+                <span className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-700'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                   {selectedTeam.name}
                 </span>
-                <div className={`link-container flex items-center space-x-2 text-sm transition-all duration-150 hover:scale-105`}>
-                  <span className="font-mono" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>{selectedTeam.slug}</span>
+                <div className={`link-container flex items-center space-x-2 text-sm px-2 py-1 rounded-md ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                  <span className="font-mono text-xs" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>{selectedTeam.slug}</span>
                   <button 
                     onClick={() => copyToClipboard(selectedTeam.slug, selectedTeam.id)}
                     className="relative group"
                   >
-                    <Copy className="w-3 h-3 group-hover:scale-110 transition-transform duration-150" />
+                    <Copy className="w-3 h-3 transition-transform duration-200 hover:scale-110" />
                     {copiedItems[selectedTeam.id] && (
-                      <span className={`absolute -top-6 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                      <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-900 text-white'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                         Copied!
                       </span>
                     )}
@@ -275,15 +356,15 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           {teams.slice(0, 4).map((team) => (
             <div
               key={team.id}
               onClick={() => handleTeamSelect(team)}
-              className={`team-card p-3 border-2 cursor-pointer transition-all duration-150 rounded-lg ${
+              className={`team-card p-4 border-2 cursor-pointer rounded-2xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${
                 selectedTeam?.id === team.id 
-                  ? `border-azure/40 bg-azure/5 transform scale-102 shadow-lg ${isDarkMode ? 'bg-azure/10' : ''}`
-                  : `${isDarkMode ? 'border-[#818181]/20 hover:border-[#818181]/40 bg-[#212124] hover:bg-[#212124]/80' : 'border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50'} hover:shadow-md hover:scale-101`
+                  ? `border-blue-400 bg-blue-50/50 ${isDarkMode ? 'bg-blue-900/20' : ''}`
+                  : `${isDarkMode ? 'border-gray-800 hover:border-gray-700 bg-[#1a1a1a] hover:bg-[#1e1e1e]' : 'border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50'}`
               }`}
             >
               <div className="flex items-center justify-between">
@@ -310,41 +391,41 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
         </div>
       </div>
 
-      {/* Search and Create Button - Repositioned */}
-      <div className="flex items-center justify-between space-x-3">
+      {/* Search and Create Button */}
+      <div className="flex items-center justify-between space-x-4">
         <div className="relative flex-1 max-w-sm">
-          <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
+          <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
           <input
             type="text"
             placeholder="Search event types..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className={`w-full pl-10 pr-4 py-2 rounded-lg border transition-all duration-150 focus:ring-2 focus:ring-azure/20 focus:border-azure ${isDarkMode ? 'bg-[#212124] border-[#818181]/20 text-white placeholder-[#818181]' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'} focus:outline-none text-sm`}
+            className={`w-full pl-10 pr-4 py-3 rounded-xl border focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${isDarkMode ? 'bg-[#1a1a1a] border-gray-800 text-white placeholder-gray-500' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'} focus:outline-none text-sm`}
             style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
           />
         </div>
         
         <DropdownMenu open={showTeamSelector} onOpenChange={setShowTeamSelector}>
           <DropdownMenuTrigger asChild>
-            <Button className="bg-azure hover:bg-azure/90 text-white transition-all duration-150 hover:shadow-md" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+            <Button className="bg-[#C9D9E3] hover:bg-[#b8c9d4] text-gray-800 transition-all duration-200 hover:shadow-md rounded-xl px-6 py-3" style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
               <Plus className="w-4 h-4 mr-2" />
               Create Event Type
               <ChevronDown className="w-4 h-4 ml-2" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className={`w-48 transition-colors duration-150 shadow-lg ${isDarkMode ? 'bg-[#212124]/90 backdrop-blur-xl border-[#818181]/20' : 'bg-white/90 backdrop-blur-xl border-gray-200'}`}>
+          <DropdownMenuContent align="end" className={`w-48 shadow-xl rounded-xl ${isDarkMode ? 'bg-[#1a1a1a] border-gray-800' : 'bg-white border-gray-200'}`}>
             <DropdownMenuItem 
               onClick={() => {
                 setSelectedCreateTeam(null);
                 setShowCreateDialog(true);
                 setShowTeamSelector(false);
               }}
-              className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}
+              className={`rounded-lg m-1 ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'}`}
               style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
             >
               Personal (Sanskar)
             </DropdownMenuItem>
-            <DropdownMenuSeparator className={`transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20' : 'bg-gray-200'}`} />
+            <DropdownMenuSeparator className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`} />
             {teams.map((team) => (
               <DropdownMenuItem 
                 key={team.id}
@@ -353,78 +434,82 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                   setShowCreateDialog(true);
                   setShowTeamSelector(false);
                 }}
-                className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}
+                className={`rounded-lg m-1 ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'}`}
                 style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
               >
                 <span className="mr-2">{team.logo}</span>
                 {team.name}
               </DropdownMenuItem>
             ))}
-          </DropdownMenuContent>
+          </DropdownContent>
         </DropdownMenu>
       </div>
 
       {/* Create Event Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent className={`transition-colors duration-300 ${isDarkMode ? 'bg-[#212124] border-[#818181]/20' : 'bg-white border-gray-200'}`}>
+        <DialogContent className={`rounded-2xl ${isDarkMode ? 'bg-[#1a1a1a] border-gray-800' : 'bg-white border-gray-200'}`}>
           <DialogHeader>
-            <DialogTitle className={`text-lg font-semibold transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-              Add a new event type
-            </DialogTitle>
-            <p className={`text-sm transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-              Create a new event type for people to book times with.
-            </p>
+            <div className="flex items-center space-x-2">
+              <DialogTitle className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                Add a new event type
+              </DialogTitle>
+              <span className={`text-gray-500`}>•</span>
+              <span className={`text-gray-500 text-sm`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                {selectedCreateTeam ? selectedCreateTeam.name : 'Personal'}
+              </span>
+              <ChevronDown className="w-4 h-4 text-gray-500" />
+            </div>
           </DialogHeader>
           
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div>
-              <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                 Title
               </label>
               <input
                 type="text"
                 value={newEventForm.title}
                 onChange={(e) => setNewEventForm(prev => ({ ...prev, title: e.target.value }))}
-                className={`w-full px-3 py-2 rounded-lg border transition-all duration-150 focus:ring-2 focus:ring-azure/20 focus:border-azure ${isDarkMode ? 'bg-[#161618] border-[#818181]/20 text-white' : 'bg-white border-gray-200 text-gray-900'} focus:outline-none text-sm`}
+                className={`w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${isDarkMode ? 'bg-[#151515] border-gray-800 text-white' : 'bg-white border-gray-200 text-gray-900'} focus:outline-none text-sm`}
                 placeholder="Event title"
                 style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
               />
             </div>
 
             <div>
-              <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                 URL
               </label>
               <div className="flex items-center">
-                <span className={`px-3 py-2 rounded-l-lg border-r-0 border transition-colors duration-300 ${isDarkMode ? 'bg-[#161618] border-[#818181]/20 text-[#818181]' : 'bg-gray-50 border-gray-200 text-gray-500'} text-sm`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-                  cal.id/sanskar/
+                <span className={`px-4 py-3 rounded-l-xl border-r-0 border ${isDarkMode ? 'bg-[#151515] border-gray-800 text-gray-400' : 'bg-gray-50 border-gray-200 text-gray-500'} text-sm`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                  {getUrlPrefix()}/
                 </span>
                 <input
                   type="text"
                   value={newEventForm.slug}
                   onChange={(e) => setNewEventForm(prev => ({ ...prev, slug: e.target.value }))}
-                  className={`flex-1 px-3 py-2 rounded-r-lg border transition-all duration-150 focus:ring-2 focus:ring-azure/20 focus:border-azure ${isDarkMode ? 'bg-[#161618] border-[#818181]/20 text-white' : 'bg-white border-gray-200 text-gray-900'} focus:outline-none text-sm`}
+                  className={`flex-1 px-4 py-3 rounded-r-xl border focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${isDarkMode ? 'bg-[#151515] border-gray-800 text-white' : 'bg-white border-gray-200 text-gray-900'} focus:outline-none text-sm`}
                   style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
                 />
               </div>
             </div>
 
             <div>
-              <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                 Description
               </label>
               <input
                 type="text"
                 value={newEventForm.description}
                 onChange={(e) => setNewEventForm(prev => ({ ...prev, description: e.target.value }))}
-                className={`w-full px-3 py-2 rounded-lg border transition-all duration-150 focus:ring-2 focus:ring-azure/20 focus:border-azure ${isDarkMode ? 'bg-[#161618] border-[#818181]/20 text-white placeholder-[#818181]' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'} focus:outline-none text-sm`}
+                className={`w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${isDarkMode ? 'bg-[#151515] border-gray-800 text-white placeholder-gray-500' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'} focus:outline-none text-sm`}
                 placeholder="A quick video meeting"
                 style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
               />
             </div>
 
             <div>
-              <label className={`block text-sm font-medium mb-2 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                 Duration
               </label>
               <div className="flex flex-wrap gap-2">
@@ -432,10 +517,10 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                   <button
                     key={duration}
                     onClick={() => handleDurationToggle(duration)}
-                    className={`px-3 py-1.5 rounded-full text-sm transition-all duration-150 ${
+                    className={`px-4 py-2 rounded-full text-sm transition-all duration-200 ${
                       newEventForm.selectedDurations.includes(duration)
-                        ? 'bg-azure text-white'
-                        : `${isDarkMode ? 'bg-[#818181]/20 text-[#818181] hover:bg-[#818181]/30' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`
+                        ? 'bg-[#C9D9E3] text-gray-800'
+                        : `${isDarkMode ? 'bg-gray-800 text-gray-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`
                     }`}
                     style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
                   >
@@ -449,14 +534,14 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
               <Button 
                 variant="outline" 
                 onClick={() => setShowCreateDialog(false)}
-                className={`transition-colors duration-300 ${isDarkMode ? 'border-[#818181]/20 text-[#818181] hover:bg-[#818181]/10' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+                className={`rounded-xl ${isDarkMode ? 'border-gray-800 text-gray-400 hover:bg-gray-800' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}
                 style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
               >
                 Cancel
               </Button>
               <Button 
                 onClick={handleCreateEventSubmit}
-                className="bg-azure hover:bg-azure/90 text-white transition-all duration-150"
+                className="bg-[#C9D9E3] hover:bg-[#b8c9d4] text-gray-800 rounded-xl"
                 disabled={!newEventForm.title.trim()}
                 style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
               >
@@ -467,142 +552,179 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
         </DialogContent>
       </Dialog>
 
-      {/* Event Types */}
-      <div className="space-y-2">
-        {filteredEventTypes.map((event: any) => (
-          <div
-            key={event.id}
-            draggable
-            onClick={(e) => handleEventTileClick(event, e)}
-            className={`group rounded-lg p-3 border cursor-pointer transition-all duration-150 hover:shadow-sm hover:scale-101 ${
-              dragOverItem === event.id 
-                ? `${isDarkMode ? 'border-azure/50 bg-azure/10' : 'border-azure/30 bg-azure/5'}` 
-                : `${isDarkMode ? 'bg-[#212124] border-[#818181]/20 hover:border-[#818181]/40' : 'bg-white border-gray-200 hover:border-gray-300'}`
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3 flex-1">
-                <div className="opacity-0 group-hover:opacity-100 transition-all duration-150">
-                  <GripVertical className={`w-3 h-3 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-400'}`} />
-                </div>
-
-                <div className={`w-8 h-8 rounded-lg ${event.color === 'azure' ? 'bg-azure' : event.color === 'pulse' ? 'bg-pulse' : event.color === 'amber' ? 'bg-amber' : 'bg-quantum'} flex items-center justify-center text-white text-sm shadow-sm`}>
-                  {event.icon}
-                </div>
-
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <h3 className={`font-semibold text-sm transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-                      {event.title}
-                    </h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full transition-all duration-150 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-                      {event.bookingsToday} today
-                    </span>
+      {/* Event Types with enhanced animations and reorder controls */}
+      <div className="space-y-3">
+        {filteredEventTypes.map((event: any, index: number) => {
+          const IconComponent = eventTypeIcons[event.id] || Calendar;
+          return (
+            <div
+              key={event.id}
+              draggable
+              onDragStart={(e) => handleDragStart(e, event.id)}
+              onDragOver={(e) => handleDragOver(e, event.id)}
+              onDragEnd={handleDragEnd}
+              onDrop={(e) => handleDrop(e, event.id)}
+              onClick={(e) => handleEventTileClick(event, e)}
+              className={`group rounded-2xl p-4 border cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${
+                dragOverItem === event.id 
+                  ? `${isDarkMode ? 'border-blue-500/50 bg-blue-900/20' : 'border-blue-300 bg-blue-50/50'}` 
+                  : `${isDarkMode ? 'bg-[#1a1a1a] border-gray-800 hover:border-gray-700 hover:bg-[#1e1e1e]' : 'bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4 flex-1">
+                  {/* Reorder Controls */}
+                  <div className="flex flex-col items-center space-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMoveEvent(event.id, 'up');
+                      }}
+                      disabled={index === 0}
+                      className={`p-1 rounded transition-colors duration-200 ${
+                        index === 0 
+                          ? 'text-gray-300 cursor-not-allowed' 
+                          : `${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'}`
+                      }`}
+                    >
+                      <ChevronUp className="w-3 h-3" />
+                    </button>
+                    <GripVertical className={`w-3 h-3 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`} />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMoveEvent(event.id, 'down');
+                      }}
+                      disabled={index === filteredEventTypes.length - 1}
+                      className={`p-1 rounded transition-colors duration-200 ${
+                        index === filteredEventTypes.length - 1 
+                          ? 'text-gray-300 cursor-not-allowed' 
+                          : `${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'}`
+                      }`}
+                    >
+                      <ChevronDown className="w-3 h-3" />
+                    </button>
                   </div>
-                  <p className={`text-xs mb-1 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-                    {event.description}
-                  </p>
-                  <div className="flex items-center space-x-1">
-                    {event.durations.map((duration: string) => (
-                      <span
-                        key={duration}
-                        className={`px-2 py-0.5 rounded-full text-xs transition-all duration-150 ${isDarkMode ? 'bg-[#818181]/20 text-[#818181]' : 'bg-gray-100 text-gray-600'}`}
-                        style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
-                      >
-                        {duration}
+
+                  {/* Event Icon */}
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} shadow-sm`}>
+                    <IconComponent className={`w-6 h-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
+                  </div>
+
+                  <div className="flex-1 space-y-2">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <h3 className={`font-semibold text-base ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                        {event.title}
+                      </h3>
+                      <span className={`text-xs px-2 py-1 rounded-full ${isDarkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                        {event.bookingsToday} today
                       </span>
-                    ))}
+                    </div>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                      {event.description}
+                    </p>
+                    <div className="flex items-center space-x-2">
+                      {event.durations.map((duration: string) => (
+                        <span
+                          key={duration}
+                          className={`px-2 py-1 rounded-full text-xs ${isDarkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'}`}
+                          style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
+                        >
+                          {duration}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-center space-x-2">
-                <Switch 
-                  checked={event.isActive}
-                  onCheckedChange={() => handleToggleActive(event.id)}
-                  className="data-[state=checked]:bg-azure transition-all duration-150"
-                />
+                <div className="flex items-center space-x-3">
+                  <Switch 
+                    checked={event.isActive}
+                    onCheckedChange={() => handleToggleActive(event.id)}
+                    className="data-[state=checked]:bg-[#C9D9E3]"
+                  />
 
-                <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-all duration-150">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="w-8 h-8 transition-all duration-150"
-                    onClick={(e) => {e.stopPropagation();}}
-                  >
-                    <Eye className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
-                  </Button>
+                  <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                      onClick={(e) => {e.stopPropagation();}}
+                    >
+                      <Eye className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                    </Button>
 
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="w-8 h-8 transition-all duration-150 relative group"
-                    onClick={(e) => { 
-                      e.stopPropagation(); 
-                      copyToClipboard(event.slug, `event-${event.id}`); 
-                    }}
-                  >
-                    <Copy className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
-                    {copiedItems[`event-${event.id}`] && (
-                      <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg animate-fade-in ${isDarkMode ? 'bg-[#212124] text-white' : 'bg-gray-900 text-white'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-                        Copied!
-                      </span>
-                    )}
-                  </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 relative group"
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        copyToClipboard(event.slug, `event-${event.id}`); 
+                      }}
+                    >
+                      <Copy className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                      {copiedItems[`event-${event.id}`] && (
+                        <span className={`absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-900 text-white'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                          Copied!
+                        </span>
+                      )}
+                    </Button>
 
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="w-8 h-8 transition-all duration-150"
-                        onClick={(e) => {e.stopPropagation();}}
-                      >
-                        <MoreHorizontal className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className={`transition-colors duration-150 shadow-lg ${isDarkMode ? 'bg-[#212124]/90 backdrop-blur-xl border-[#818181]/20' : 'bg-white/90 backdrop-blur-xl border-gray-200'}`}>
-                      <DropdownMenuItem 
-                        onClick={(e) => { e.stopPropagation(); onEventClick(event); }}
-                        className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}
-                        style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
-                      >
-                        <Edit className="w-4 h-4 mr-2" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        onClick={(e) => { e.stopPropagation(); handleDuplicateEvent(event); }}
-                        className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`}
-                        style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
-                      >
-                        <Copy className="w-4 h-4 mr-2" />
-                        Duplicate
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className={`transition-colors duration-300 ${isDarkMode ? 'text-white hover:bg-[#818181]/10' : 'text-gray-900 hover:bg-gray-50'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-                        <Code2 className="w-4 h-4 mr-2" />
-                        Embed
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator className={`transition-colors duration-300 ${isDarkMode ? 'bg-[#818181]/20' : 'bg-gray-200'}`} />
-                      <DropdownMenuItem 
-                        onClick={(e) => { e.stopPropagation(); handleDeleteEvent(event.id); }}
-                        className={`text-red-600 transition-colors duration-300 ${isDarkMode ? 'hover:bg-[#818181]/10' : 'hover:bg-gray-50'}`}
-                        style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
-                      >
-                        <Trash2 className="w-4 h-4 mr-2" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                          onClick={(e) => {e.stopPropagation();}}
+                        >
+                          <MoreHorizontal className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className={`shadow-xl rounded-xl ${isDarkMode ? 'bg-[#1a1a1a] border-gray-800' : 'bg-white border-gray-200'}`}>
+                        <DropdownMenuItem 
+                          onClick={(e) => { e.stopPropagation(); onEventClick(event); }}
+                          className={`rounded-lg m-1 ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'}`}
+                          style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
+                        >
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={(e) => { e.stopPropagation(); handleDuplicateEvent(event); }}
+                          className={`rounded-lg m-1 ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'}`}
+                          style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
+                        >
+                          <Copy className="w-4 h-4 mr-2" />
+                          Duplicate
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className={`rounded-lg m-1 ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                          <Code2 className="w-4 h-4 mr-2" />
+                          Embed
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`} />
+                        <DropdownMenuItem 
+                          onClick={(e) => { e.stopPropagation(); handleDeleteEvent(event.id); }}
+                          className={`text-red-600 rounded-lg m-1 ${isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}
+                          style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {filteredEventTypes.length === 0 && (
-        <div className="text-center py-8">
-          <p className={`text-sm transition-colors duration-300 ${isDarkMode ? 'text-[#818181]' : 'text-gray-500'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+        <div className="text-center py-12">
+          <p className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
             No event types found matching your search.
           </p>
         </div>
