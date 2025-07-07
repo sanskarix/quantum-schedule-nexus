@@ -105,7 +105,7 @@
 
 @layer base {
   * {
-    @apply border-border transition-all duration-200;
+    @apply border-border transition-all duration-150;
   }
 
   body {
@@ -125,32 +125,32 @@
 @layer utilities {
   /* Minimal animations */
   .animate-fade-in {
-    animation: fadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .animate-scale-in {
-    animation: scaleIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: scaleIn 0.1s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Minimal hover effects */
   .hover-scale:hover {
     transform: scale(1.02);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .hover-scale-101:hover {
     transform: scale(1.01);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .hover-scale-102:hover {
     transform: scale(1.02);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Link containers with grey background */
   .link-container {
-    @apply px-2 py-1 rounded-md transition-all duration-200;
+    @apply px-2 py-1 rounded-md transition-all duration-150;
     background: rgba(156, 163, 175, 0.15);
   }
 
@@ -177,15 +177,15 @@
 
   /* Better focus states */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-azure/30 focus:border-azure transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-azure/30 focus:border-azure transition-all duration-150;
   }
 }
 
-/* Optimized animation keyframes */
+/* Optimized animation keyframes - faster */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -196,7 +196,7 @@
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.98);
   }
   to {
     opacity: 1;
@@ -216,7 +216,7 @@
 ::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.15);
   border-radius: 3px;
-  transition: background 0.2s ease;
+  transition: background 0.15s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -233,11 +233,11 @@
 
 /* Enhanced button styles */
 .btn-primary {
-  @apply bg-azure hover:bg-azure/90 text-white font-medium px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-md;
+  @apply bg-azure hover:bg-azure/90 text-white font-medium px-4 py-2 rounded-lg transition-all duration-150 hover:shadow-md;
 }
 
 .btn-secondary {
-  @apply bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-sm;
+  @apply bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium px-4 py-2 rounded-lg transition-all duration-150 hover:shadow-sm;
 }
 
 .dark .btn-secondary {
@@ -246,7 +246,7 @@
 
 /* Enhanced card styles with better spacing */
 .card {
-  @apply rounded-lg border transition-all duration-200 hover:shadow-md;
+  @apply rounded-lg border transition-all duration-150 hover:shadow-md;
 }
 
 .dark .card {
@@ -274,9 +274,9 @@ button {
   @apply theme-transition;
 }
 
-/* Enhanced dropdown animations - minimal */
+/* Enhanced dropdown animations - minimal and fast */
 .dropdown-enter {
-  animation: scaleIn 0.15s ease-out;
+  animation: scaleIn 0.1s ease-out;
 }
 
 /* Optimized spacing utilities */
