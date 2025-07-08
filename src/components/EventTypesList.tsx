@@ -346,9 +346,6 @@ data-cal-config='{"layout":"${embedSettings.layout}"}'
     description: 'A quick video meeting',
     selectedDurations: ['30m']
   });
-  const [showEmbedDialog, setShowEmbedDialog] = useState(false);
-  const [selectedEventForEmbed, setSelectedEventForEmbed] = useState<any>(null);
-
   const stats = [
     { value: 18, label: 'This Month', trend: 'up', change: '+12%' },
     { value: 7, label: 'This Week', trend: 'up', change: '+5%' },
@@ -1028,10 +1025,6 @@ data-cal-config='{"layout":"${embedSettings.layout}"}'
                           className={`rounded-lg m-1 text-base ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} 
                           style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
                         >
-                          onClick={(e) => { e.stopPropagation(); setShowEmbedDialog(true); setSelectedEventForEmbed(event); }}
-                          className={`rounded-lg m-1 text-base ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} 
-                          style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
-                        >
                           <Code2 className="w-5 h-5 mr-3" />
                           Embed
                         </DropdownMenuItem>
@@ -1039,7 +1032,6 @@ data-cal-config='{"layout":"${embedSettings.layout}"}'
                         <DropdownMenuItem 
                           onClick={(e) => { e.stopPropagation(); handleDeleteEvent(event.id); }}
                           className={`text-red-600 rounded-lg m-1 text-base ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-                          style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
                         >
                           <Trash2 className="w-5 h-5 mr-3" />
                           Delete
