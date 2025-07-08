@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ArrowLeft, Copy, Check, Monitor, MousePointer, Clock as Click, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
@@ -40,11 +39,11 @@ const EmbedDialog: React.FC<EmbedDialogProps> = ({ open, onOpenChange, isDarkMod
       title: 'Inline Embed',
       description: 'Loads your event type directly inline with your other website content.',
       icon: (
-        <div className="w-full h-16 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center border-2 border-blue-500">
-          <div className="w-12 h-8 bg-white dark:bg-gray-700 rounded border flex items-center justify-center">
+        <div className="w-full h-24 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center border-2 border-blue-500">
+          <div className="w-16 h-12 bg-white dark:bg-gray-700 rounded border flex items-center justify-center">
             <div className="grid grid-cols-7 gap-0.5">
-              {Array.from({ length: 14 }).map((_, i) => (
-                <div key={i} className={`w-0.5 h-0.5 rounded-full ${i === 4 ? 'bg-blue-500' : 'bg-gray-300'}`} />
+              {Array.from({ length: 21 }).map((_, i) => (
+                <div key={i} className={`w-1 h-1 rounded-full ${i === 7 ? 'bg-blue-500' : 'bg-gray-300'}`} />
               ))}
             </div>
           </div>
@@ -56,12 +55,12 @@ const EmbedDialog: React.FC<EmbedDialogProps> = ({ open, onOpenChange, isDarkMod
       title: 'Floating pop-up button',
       description: 'Puts a floating button on your site that triggers a modal with your event type.',
       icon: (
-        <div className="w-full h-16 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center relative">
-          <div className="w-12 h-8 bg-white dark:bg-gray-700 rounded border flex items-center justify-center">
+        <div className="w-full h-24 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center relative">
+          <div className="w-16 h-12 bg-white dark:bg-gray-700 rounded border flex items-center justify-center">
             <div className="text-xs text-gray-400">Website</div>
           </div>
-          <div className="absolute bottom-1 right-1 w-6 h-4 bg-blue-500 rounded text-white text-xs flex items-center justify-center">
-            Cal
+          <div className="absolute bottom-2 right-2 w-8 h-6 bg-blue-500 rounded text-white text-xs flex items-center justify-center">
+            Book
           </div>
         </div>
       )
@@ -71,11 +70,11 @@ const EmbedDialog: React.FC<EmbedDialogProps> = ({ open, onOpenChange, isDarkMod
       title: 'Pop up via element click',
       description: 'Open your calendar as a dialog when someone clicks an element.',
       icon: (
-        <div className="w-full h-16 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-          <div className="w-12 h-8 bg-white dark:bg-gray-700 rounded border flex items-center justify-center relative">
+        <div className="w-full h-24 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+          <div className="w-16 h-12 bg-white dark:bg-gray-700 rounded border flex items-center justify-center relative">
             <div className="text-xs text-gray-400">Click me</div>
-            <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-blue-500 rounded-full flex items-center justify-center">
-              <div className="w-0.5 h-0.5 bg-white rounded-full" />
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full flex items-center justify-center">
+              <div className="w-1 h-1 bg-white rounded-full" />
             </div>
           </div>
         </div>
@@ -86,13 +85,13 @@ const EmbedDialog: React.FC<EmbedDialogProps> = ({ open, onOpenChange, isDarkMod
       title: 'Email Embed',
       description: 'Select a few available times and embed them in your Email',
       icon: (
-        <div className="w-full h-16 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-          <div className="w-12 h-8 bg-white dark:bg-gray-700 rounded border p-1">
-            <div className="space-y-0.5">
-              <div className="h-0.5 bg-gray-300 rounded w-full" />
-              <div className="h-0.5 bg-gray-300 rounded w-3/4" />
-              <div className="h-0.5 bg-blue-500 rounded w-1/2" />
-              <div className="h-0.5 bg-gray-300 rounded w-2/3" />
+        <div className="w-full h-24 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+          <div className="w-16 h-12 bg-white dark:bg-gray-700 rounded border p-2">
+            <div className="space-y-1">
+              <div className="h-1 bg-gray-300 rounded w-full" />
+              <div className="h-1 bg-gray-300 rounded w-3/4" />
+              <div className="h-1 bg-blue-500 rounded w-1/2" />
+              <div className="h-1 bg-gray-300 rounded w-2/3" />
             </div>
           </div>
         </div>
@@ -102,10 +101,10 @@ const EmbedDialog: React.FC<EmbedDialogProps> = ({ open, onOpenChange, isDarkMod
 
   const timeSlots = ['1:00pm', '1:15pm', '1:30pm', '1:45pm', '2:00pm', '2:15pm', '2:30pm', '2:45pm'];
 
-  const generateCode = (type: 'html' | 'react', embedType: string) => {
+  const generateCode = (type: 'html' | 'react') => {
     const eventSlug = eventType?.slug?.replace('/', '') || 'sanskar/product-hunt-chats';
     
-    if (embedType === 'inline') {
+    if (selectedEmbedType === 'inline') {
       if (type === 'html') {
         return `<!-- Cal inline embed code begins -->
 <div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline"></div>
@@ -151,83 +150,8 @@ embedJsUrl="https://app.cal.id/embed-link/embed.js"
       }
     }
     
-    if (embedType === 'floating') {
-      if (type === 'html') {
-        return `<!-- Cal floating-popup embed code begins -->
-<script type="text/javascript">
-(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
-Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
-
-Cal.ns["product-hunt-chats"]("floatingButton", {"calLink":"${eventSlug}","config":{"layout":"month_view"}});
-Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":${!embedConfig.hideEventTypeDetails},"layout":"month_view"});
-</script>
-<!-- Cal floating-popup embed code ends -->`;
-      } else {
-        return `/* First make sure that you have installed the package */
-
-/* If you are using yarn */
-// yarn add @calcom/embed-react
-
-/* If you are using npm */
-// npm install @calcom/embed-react
-
-import { getCalApi } from "@calcom/embed-react";
-import { useEffect } from "react";
-export default function MyApp() {
-useEffect(()=>{
-(async function () {
-const cal = await getCalApi({"namespace":"product-hunt-chats","embedLibUrl":"https://app.cal.id/embed-link/embed.js"});
-cal("floatingButton", {"calLink":"${eventSlug}","calOrigin":"https://cal.id","config":{"layout":"month_view"}});
-cal("ui", {"hideEventTypeDetails":${!embedConfig.hideEventTypeDetails},"layout":"month_view"});
-})();
-}, [])
-};`;
-      }
-    }
-
-    if (embedType === 'popup') {
-      if (type === 'html') {
-        return `<!-- Cal element-click embed code begins -->
-<script type="text/javascript">
-(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
-Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
-
-// Important: Please add the following attributes to the element that should trigger the calendar to open upon clicking.
-// \`data-cal-link="${eventSlug}"\`
-// data-cal-namespace="product-hunt-chats"
-// \`data-cal-config='{"layout":"month_view"}'\`
-
-Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":${!embedConfig.hideEventTypeDetails},"layout":"month_view"});
-</script>
-<!-- Cal element-click embed code ends -->`;
-      } else {
-        return `/* First make sure that you have installed the package */
-
-/* If you are using yarn */
-// yarn add @calcom/embed-react
-
-/* If you are using npm */
-// npm install @calcom/embed-react
-
-import { getCalApi } from "@calcom/embed-react";
-import { useEffect } from "react";
-export default function MyApp() {
-useEffect(()=>{
-(async function () {
-const cal = await getCalApi({"namespace":"product-hunt-chats","embedLibUrl":"https://app.cal.id/embed-link/embed.js"});
-cal("ui", {"hideEventTypeDetails":${!embedConfig.hideEventTypeDetails},"layout":"month_view"});
-})();
-}, [])
-return <button data-cal-namespace="product-hunt-chats"
-data-cal-link="${eventSlug}"
-data-cal-origin="https://cal.id"
-data-cal-config='{"layout":"month_view"}'
->Click me</button>;
-};`;
-      }
-    }
-    
-    return 'Code generation for email embed...';
+    // Add other embed types here...
+    return 'Code generation for other embed types...';
   };
 
   const copyCode = (code: string) => {
@@ -240,10 +164,10 @@ data-cal-config='{"layout":"month_view"}'
     <div className="space-y-6">
       <div>
         <h2 className={`text-2xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-          How do you want to add Cal ID to your site?
+          How do you want to add OneHash Cal to your site?
         </h2>
         <p className={`text-base ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-          Choose one of the following ways to put Cal ID on your site.
+          Choose one of the following ways to put OneHash Cal on your site.
         </p>
       </div>
 
@@ -255,7 +179,7 @@ data-cal-config='{"layout":"month_view"}'
             className={`p-6 rounded-xl border-2 text-left transition-all duration-200 hover:shadow-lg ${
               selectedEmbedType === type.id
                 ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                : `border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 ${isDarkMode ? 'bg-[#1a1a1a]' : 'bg-white'}`
+                : `border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`
             }`}
           >
             <div className="mb-4">
@@ -370,7 +294,7 @@ data-cal-config='{"layout":"month_view"}'
                 className={`w-full p-3 text-left rounded-lg border transition-colors ${
                   selectedTime === time
                     ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                    : `border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 ${isDarkMode ? 'bg-[#1a1a1a]' : 'bg-white'}`
+                    : `border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`
                 }`}
               >
                 {time}
@@ -387,10 +311,10 @@ data-cal-config='{"layout":"month_view"}'
           <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Preview</span>
         </div>
 
-        <div className={`border rounded-lg p-6 ${isDarkMode ? 'border-gray-700 bg-[#1a1a1a]' : 'border-gray-200 bg-white'}`}>
+        <div className={`border rounded-lg p-6 ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
           <div className="space-y-4">
             <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              {eventType?.title || 'Product Hunt Chats'}
+              Product Hunt Chats
             </h3>
             
             <div className="space-y-2 text-sm">
@@ -418,7 +342,7 @@ data-cal-config='{"layout":"month_view"}'
             </Button>
 
             <div className={`text-xs pt-4 border-t ${isDarkMode ? 'border-gray-700 text-gray-400' : 'border-gray-200 text-gray-500'}`}>
-              Powered by <span className="font-medium">Cal ID by OneHash</span>
+              Powered by <span className="font-medium">OneHash Cal</span>
             </div>
           </div>
         </div>
@@ -469,18 +393,16 @@ data-cal-config='{"layout":"month_view"}'
                 <label className={`block text-sm mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>W</label>
                 <input
                   type="text"
-                  value={embedConfig.width}
-                  onChange={(e) => setEmbedConfig({...embedConfig, width: e.target.value})}
-                  className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
+                  value="100%"
+                  className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300'}`}
                 />
               </div>
               <div>
                 <label className={`block text-sm mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>H</label>
                 <input
                   type="text"
-                  value={embedConfig.height}
-                  onChange={(e) => setEmbedConfig({...embedConfig, height: e.target.value})}
-                  className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
+                  value="100%"
+                  className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300'}`}
                 />
               </div>
             </div>
@@ -490,11 +412,7 @@ data-cal-config='{"layout":"month_view"}'
             <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               Theme
             </h3>
-            <select 
-              value={embedConfig.theme}
-              onChange={(e) => setEmbedConfig({...embedConfig, theme: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-            >
+            <select className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300'}`}>
               <option>Auto</option>
               <option>Light</option>
               <option>Dark</option>
@@ -503,10 +421,7 @@ data-cal-config='{"layout":"month_view"}'
 
           <div className="flex items-center justify-between">
             <span className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Hide event type details</span>
-            <Switch 
-              checked={embedConfig.hideEventTypeDetails}
-              onCheckedChange={(checked) => setEmbedConfig({...embedConfig, hideEventTypeDetails: checked})}
-            />
+            <Switch />
           </div>
 
           <div>
@@ -517,9 +432,8 @@ data-cal-config='{"layout":"month_view"}'
               <div className="w-8 h-8 bg-blue-600 rounded border"></div>
               <input
                 type="text"
-                value={embedConfig.brandColorLight}
-                onChange={(e) => setEmbedConfig({...embedConfig, brandColorLight: e.target.value})}
-                className={`flex-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
+                value="007ee5"
+                className={`flex-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300'}`}
               />
             </div>
           </div>
@@ -530,9 +444,8 @@ data-cal-config='{"layout":"month_view"}'
             </h3>
             <input
               type="text"
-              value={embedConfig.brandColorDark}
-              onChange={(e) => setEmbedConfig({...embedConfig, brandColorDark: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
+              value="fafafa"
+              className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300'}`}
             />
           </div>
 
@@ -540,11 +453,7 @@ data-cal-config='{"layout":"month_view"}'
             <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               Layout
             </h3>
-            <select 
-              value={embedConfig.layout}
-              onChange={(e) => setEmbedConfig({...embedConfig, layout: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-            >
+            <select className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300'}`}>
               <option>Month</option>
               <option>Week</option>
               <option>Column</option>
@@ -563,15 +472,15 @@ data-cal-config='{"layout":"month_view"}'
           
           <TabsContent value="html" className="space-y-4">
             <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Place this code in your HTML where you want your Cal ID widget to appear.
+              Place this code in your HTML where you want your OneHash Cal widget to appear.
             </p>
             <div className="relative">
-              <pre className={`p-4 rounded-lg text-xs overflow-auto h-80 ${isDarkMode ? 'bg-[#151515] text-gray-300' : 'bg-gray-100 text-gray-800'}`}>
-                <code>{generateCode('html', 'inline')}</code>
+              <pre className={`p-4 rounded-lg text-xs overflow-auto h-80 ${isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-100 text-gray-800'}`}>
+                <code>{generateCode('html')}</code>
               </pre>
               <Button
                 size="sm"
-                onClick={() => copyCode(generateCode('html', 'inline'))}
+                onClick={() => copyCode(generateCode('html'))}
                 className="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {copiedCode ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
@@ -581,12 +490,12 @@ data-cal-config='{"layout":"month_view"}'
           
           <TabsContent value="react" className="space-y-4">
             <div className="relative">
-              <pre className={`p-4 rounded-lg text-xs overflow-auto h-80 ${isDarkMode ? 'bg-[#151515] text-gray-300' : 'bg-gray-100 text-gray-800'}`}>
-                <code>{generateCode('react', 'inline')}</code>
+              <pre className={`p-4 rounded-lg text-xs overflow-auto h-80 ${isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-100 text-gray-800'}`}>
+                <code>{generateCode('react')}</code>
               </pre>
               <Button
                 size="sm"
-                onClick={() => copyCode(generateCode('react', 'inline'))}
+                onClick={() => copyCode(generateCode('react'))}
                 className="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {copiedCode ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
@@ -595,330 +504,33 @@ data-cal-config='{"layout":"month_view"}'
           </TabsContent>
         </Tabs>
 
-        <div className="flex justify-end space-x-3">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Close
-          </Button>
-          <Button 
-            onClick={() => copyCode(generateCode('html', 'inline'))}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            Copy Code
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderFloatingEmbed = () => (
-    <div className="grid grid-cols-2 gap-8 h-[600px]">
-      {/* Left Panel */}
-      <div className="space-y-6">
-        <div className="flex items-center space-x-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setSelectedEmbedType(null)}
-            className="w-8 h-8"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-          <div>
-            <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Floating pop-up button
-            </h2>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Puts a floating button on your site that triggers a modal with your event type.
-            </p>
+        {/* Preview */}
+        <div className="border rounded-lg overflow-hidden">
+          <div className={`h-48 ${isDarkMode ? 'bg-gray-900' : 'bg-black'} flex items-center justify-center relative`}>
+            <div className="text-white text-center">
+              <div className="mb-2">
+                <div className="w-8 h-8 bg-blue-600 rounded-full mx-auto mb-2"></div>
+                <div className="text-sm font-medium">Sanskar Yadav</div>
+                <div className="text-lg font-semibold">Product Hunt Chats</div>
+                <div className="text-xs text-gray-400 mt-1">
+                  The essence of Product Hunt reflects in communities- Select a time suitable for you, and let's talk products!
+                </div>
+              </div>
+              <div className="flex space-x-2 justify-center mb-2">
+                <span className="px-2 py-1 bg-gray-700 rounded text-xs">15m</span>
+                <span className="px-2 py-1 bg-gray-700 rounded text-xs">30m</span>
+                <span className="px-2 py-1 bg-gray-700 rounded text-xs">45m</span>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Configuration Options */}
-        <div className="space-y-4">
-          <div>
-            <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Button text
-            </h3>
-            <input
-              type="text"
-              value={embedConfig.buttonText}
-              onChange={(e) => setEmbedConfig({...embedConfig, buttonText: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Display calendar icon</span>
-            <Switch 
-              checked={embedConfig.showCalendarIcon}
-              onCheckedChange={(checked) => setEmbedConfig({...embedConfig, showCalendarIcon: checked})}
-            />
-          </div>
-
-          <div>
-            <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Position of button
-            </h3>
-            <select 
-              value={embedConfig.buttonPosition}
-              onChange={(e) => setEmbedConfig({...embedConfig, buttonPosition: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-            >
-              <option>Bottom right</option>
-              <option>Bottom left</option>
-              <option>Top right</option>
-              <option>Top left</option>
-            </select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                Button color
-              </h3>
-              <input
-                type="text"
-                value={embedConfig.buttonColor}
-                onChange={(e) => setEmbedConfig({...embedConfig, buttonColor: e.target.value})}
-                className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-              />
-            </div>
-            <div>
-              <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                Text color
-              </h3>
-              <input
-                type="text"
-                value={embedConfig.textColor}
-                onChange={(e) => setEmbedConfig({...embedConfig, textColor: e.target.value})}
-                className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-              />
-            </div>
-          </div>
-
-          {/* Theme, Hide details, Brand colors, Layout - same as inline */}
-          <div>
-            <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Theme
-            </h3>
-            <select 
-              value={embedConfig.theme}
-              onChange={(e) => setEmbedConfig({...embedConfig, theme: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-            >
-              <option>Auto</option>
-              <option>Light</option>
-              <option>Dark</option>
-            </select>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Hide event type details</span>
-            <Switch 
-              checked={embedConfig.hideEventTypeDetails}
-              onCheckedChange={(checked) => setEmbedConfig({...embedConfig, hideEventTypeDetails: checked})}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Right Panel - Code */}
-      <div className="space-y-4">
-        <Tabs defaultValue="html" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="html">HTML</TabsTrigger>
-            <TabsTrigger value="react">React</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="html" className="space-y-4">
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Place this code in your HTML where you want your Cal ID widget to appear.
-            </p>
-            <div className="relative">
-              <pre className={`p-4 rounded-lg text-xs overflow-auto h-80 ${isDarkMode ? 'bg-[#151515] text-gray-300' : 'bg-gray-100 text-gray-800'}`}>
-                <code>{generateCode('html', 'floating')}</code>
-              </pre>
-              <Button
-                size="sm"
-                onClick={() => copyCode(generateCode('html', 'floating'))}
-                className="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                {copiedCode ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-              </Button>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="react" className="space-y-4">
-            <div className="relative">
-              <pre className={`p-4 rounded-lg text-xs overflow-auto h-80 ${isDarkMode ? 'bg-[#151515] text-gray-300' : 'bg-gray-100 text-gray-800'}`}>
-                <code>{generateCode('react', 'floating')}</code>
-              </pre>
-              <Button
-                size="sm"
-                onClick={() => copyCode(generateCode('react', 'floating'))}
-                className="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                {copiedCode ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-              </Button>
-            </div>
-          </TabsContent>
-        </Tabs>
 
         <div className="flex justify-end space-x-3">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Close
           </Button>
           <Button 
-            onClick={() => copyCode(generateCode('html', 'floating'))}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            Copy Code
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderPopupEmbed = () => (
-    <div className="grid grid-cols-2 gap-8 h-[600px]">
-      {/* Left Panel */}
-      <div className="space-y-6">
-        <div className="flex items-center space-x-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setSelectedEmbedType(null)}
-            className="w-8 h-8"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-          <div>
-            <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Pop up via element click
-            </h2>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Open your calendar as a dialog when someone clicks an element.
-            </p>
-          </div>
-        </div>
-
-        {/* Configuration Options */}
-        <div className="space-y-4">
-          <div>
-            <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Theme
-            </h3>
-            <select 
-              value={embedConfig.theme}
-              onChange={(e) => setEmbedConfig({...embedConfig, theme: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-            >
-              <option>Auto</option>
-              <option>Light</option>
-              <option>Dark</option>
-            </select>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Hide event type details</span>
-            <Switch 
-              checked={embedConfig.hideEventTypeDetails}
-              onCheckedChange={(checked) => setEmbedConfig({...embedConfig, hideEventTypeDetails: checked})}
-            />
-          </div>
-
-          <div>
-            <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Brand Color (Light Theme)
-            </h3>
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-600 rounded border"></div>
-              <input
-                type="text"
-                value={embedConfig.brandColorLight}
-                onChange={(e) => setEmbedConfig({...embedConfig, brandColorLight: e.target.value})}
-                className={`flex-1 px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-              />
-            </div>
-          </div>
-
-          <div>
-            <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Brand Color (Dark Theme)
-            </h3>
-            <input
-              type="text"
-              value={embedConfig.brandColorDark}
-              onChange={(e) => setEmbedConfig({...embedConfig, brandColorDark: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-            />
-          </div>
-
-          <div>
-            <h3 className={`font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Layout
-            </h3>
-            <select 
-              value={embedConfig.layout}
-              onChange={(e) => setEmbedConfig({...embedConfig, layout: e.target.value})}
-              className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700 text-white' : 'bg-white border-gray-300'}`}
-            >
-              <option>Month</option>
-              <option>Week</option>
-              <option>Column</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Right Panel - Code */}
-      <div className="space-y-4">
-        <Tabs defaultValue="html" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="html">HTML</TabsTrigger>
-            <TabsTrigger value="react">React</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="html" className="space-y-4">
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Place this code in your HTML where you want your Cal ID widget to appear.
-            </p>
-            <div className="relative">
-              <pre className={`p-4 rounded-lg text-xs overflow-auto h-80 ${isDarkMode ? 'bg-[#151515] text-gray-300' : 'bg-gray-100 text-gray-800'}`}>
-                <code>{generateCode('html', 'popup')}</code>
-              </pre>
-              <Button
-                size="sm"
-                onClick={() => copyCode(generateCode('html', 'popup'))}
-                className="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                {copiedCode ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-              </Button>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="react" className="space-y-4">
-            <div className="relative">
-              <pre className={`p-4 rounded-lg text-xs overflow-auto h-80 ${isDarkMode ? 'bg-[#151515] text-gray-300' : 'bg-gray-100 text-gray-800'}`}>
-                <code>{generateCode('react', 'popup')}</code>
-              </pre>
-              <Button
-                size="sm"
-                onClick={() => copyCode(generateCode('react', 'popup'))}
-                className="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                {copiedCode ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-              </Button>
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        <div className="flex justify-end space-x-3">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Close
-          </Button>
-          <Button 
-            onClick={() => copyCode(generateCode('html', 'popup'))}
+            onClick={() => copyCode(generateCode('html'))}
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             Copy Code
@@ -934,10 +546,6 @@ data-cal-config='{"layout":"month_view"}'
         return renderEmailEmbed();
       case 'inline':
         return renderInlineEmbed();
-      case 'floating':
-        return renderFloatingEmbed();
-      case 'popup':
-        return renderPopupEmbed();
       default:
         return renderMainSelection();
     }
@@ -945,7 +553,7 @@ data-cal-config='{"layout":"month_view"}'
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={`max-w-6xl max-h-[90vh] overflow-hidden ${isDarkMode ? 'bg-[#1a1a1a] border-gray-700' : 'bg-white border-gray-200'}`}>
+      <DialogContent className={`max-w-6xl max-h-[90vh] overflow-hidden ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
         <div className="p-6">
           {selectedEmbedType ? renderSelectedEmbed() : renderMainSelection()}
         </div>
