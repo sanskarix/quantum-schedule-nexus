@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Copy, Check, Monitor, MousePointer, Click, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Copy, Check, Monitor, MousePointer, Clock as Click, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
 import { Switch } from './ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
