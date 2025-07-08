@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Search, Plus, TrendingUp, TrendingDown, Copy, GripVertical, Eye, MoreHorizontal, Edit, Code2, Trash2, ChevronDown, ChevronUp, Calendar, Clock, Users, Grid3X3, Route, Layers, BarChart3, Monitor, MousePointer, Mail } from 'lucide-react';
 import { Button } from './ui/button';
 import { Switch } from './ui/switch';
+import EmbedDialog from './EmbedDialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -345,6 +346,8 @@ data-cal-config='{"layout":"${embedSettings.layout}"}'
     description: 'A quick video meeting',
     selectedDurations: ['30m']
   });
+  const [showEmbedDialog, setShowEmbedDialog] = useState(false);
+  const [selectedEventForEmbed, setSelectedEventForEmbed] = useState<any>(null);
 
   const stats = [
     { value: 18, label: 'This Month', trend: 'up', change: '+12%' },
@@ -489,6 +492,11 @@ data-cal-config='{"layout":"${embedSettings.layout}"}'
         ? prev.selectedDurations.filter(d => d !== duration)
         : [...prev.selectedDurations, duration]
     }));
+  };
+
+  const handleEmbedClick = (event: any) => {
+    setSelectedEventForEmbed(event);
+    setShowEmbedDialog(true);
   };
 
   const handleMoveEvent = (eventId: number, direction: 'up' | 'down') => {
@@ -1016,6 +1024,10 @@ data-cal-config='{"layout":"${embedSettings.layout}"}'
                           Duplicate
                         </DropdownMenuItem>
                         <DropdownMenuItem 
+                          onClick={(e) => { e.stopPropagation(); handleEmbedClick(event); }}
+                          className={`rounded-lg m-1 text-base ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} 
+                          style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
+                        >
                           onClick={(e) => { e.stopPropagation(); setShowEmbedDialog(true); setSelectedEventForEmbed(event); }}
                           className={`rounded-lg m-1 text-base ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} 
                           style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
@@ -1049,6 +1061,13 @@ data-cal-config='{"layout":"${embedSettings.layout}"}'
           </p>
         </div>
       )}
+
+      <EmbedDialog
+        open={showEmbedDialog}
+        onOpenChange={setShowEmbedDialog}
+        isDarkMode={isDarkMode}
+        eventType={selectedEventForEmbed}
+      />
 
     {/* Embed Dialog */}
     <Dialog open={showEmbedDialog} onOpenChange={setShowEmbedDialog}>
