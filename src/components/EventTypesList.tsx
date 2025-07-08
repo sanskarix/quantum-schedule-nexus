@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, MoreVertical, Copy, CheckCircle, Search, Settings, Code2, Trash2, ExternalLink, BarChart3, Menu, ArrowUp, ArrowDown, GripVertical, Plus } from 'lucide-react';
 import { Button } from './ui/button';
@@ -354,7 +355,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
         ))}
       </div>
 
-      {/* Embed Dialog */}
+      {/* Embed Dialog - Only update this component */}
       <EmbedDialog 
         open={showEmbedDialog}
         onOpenChange={setShowEmbedDialog}
