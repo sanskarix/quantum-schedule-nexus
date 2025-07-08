@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Search, Zap, Plus, Star, Clock, Filter } from 'lucide-react';
 import { Button } from './ui/button';
@@ -84,16 +83,6 @@ const AppsView: React.FC<AppsViewProps> = ({ isDarkMode }) => {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-          App Store
-        </h1>
-        <p className={`text-lg ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-          Discover and install apps to extend your calendar's functionality
-        </p>
-      </div>
-
       {/* Search */}
       <div className="relative">
         <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
