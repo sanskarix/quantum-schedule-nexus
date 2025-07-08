@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Users, MoreVertical, Copy, CheckCircle, Search, Settings, Code2, Trash2, ExternalLink, BarChart3, Menu, ArrowUp, ArrowDown, GripVertical } from 'lucide-react';
+import { Calendar, Clock, Users, MoreVertical, Copy, CheckCircle, Search, Settings, Code2, Trash2, ExternalLink, BarChart3, Menu, ArrowUp, ArrowDown, GripVertical, Plus } from 'lucide-react';
 import { Button } from './ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
@@ -40,9 +40,20 @@ interface EventTypesListProps {
   searchQuery: string;
   teams: Team[];
   selectedTeam: Team | null;
+  setSelectedTeam?: (team: Team | null) => void;
+  onEventClick?: (event: EventType) => void;
 }
 
-const EventTypesList: React.FC<EventTypesListProps> = ({ eventTypes, setEventTypes, isDarkMode, searchQuery, teams, selectedTeam }) => {
+const EventTypesList: React.FC<EventTypesListProps> = ({ 
+  eventTypes, 
+  setEventTypes, 
+  isDarkMode, 
+  searchQuery, 
+  teams, 
+  selectedTeam, 
+  setSelectedTeam,
+  onEventClick 
+}) => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showEmbedDialog, setShowEmbedDialog] = useState(false);
   const [selectedEventForEmbed, setSelectedEventForEmbed] = useState<any>(null);
@@ -84,12 +95,12 @@ const EventTypesList: React.FC<EventTypesListProps> = ({ eventTypes, setEventTyp
 
   const handleDragEnd = () => {
     if (draggedItem !== null && dragOverItem !== null && draggedItem !== dragOverItem) {
-      const newEventTypes = [...currentEventTypes];
+      const newEventTypes = [...getCurrentEventTypes()];
       const draggedEventType = newEventTypes[draggedItem];
       newEventTypes.splice(draggedItem, 1);
       newEventTypes.splice(dragOverItem, 0, draggedEventType);
       
-      if (selectedTeam) {
+      if (selectedTeam && setSelectedTeam) {
         const updatedTeams = teams.map(team => 
           team.id === selectedTeam.id 
             ? { ...team, eventTypes: newEventTypes }
@@ -105,7 +116,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({ eventTypes, setEventTyp
   };
 
   const moveEventType = (index: number, direction: 'up' | 'down') => {
-    const newEventTypes = [...currentEventTypes];
+    const newEventTypes = [...getCurrentEventTypes()];
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
     
     if (targetIndex >= 0 && targetIndex < newEventTypes.length) {
@@ -113,7 +124,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({ eventTypes, setEventTyp
       newEventTypes[index] = newEventTypes[targetIndex];
       newEventTypes[targetIndex] = temp;
       
-      if (selectedTeam) {
+      if (selectedTeam && setSelectedTeam) {
         const updatedTeams = teams.map(team => 
           team.id === selectedTeam.id 
             ? { ...team, eventTypes: newEventTypes }
@@ -139,7 +150,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({ eventTypes, setEventTyp
   };
 
   const handleDeleteEvent = (id: number) => {
-    if (selectedTeam) {
+    if (selectedTeam && setSelectedTeam) {
       const updatedTeams = teams.map(team =>
         team.id === selectedTeam.id
           ? { ...team, eventTypes: team.eventTypes.filter(event => event.id !== id) }

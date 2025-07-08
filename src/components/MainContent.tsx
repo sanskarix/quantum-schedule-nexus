@@ -60,13 +60,12 @@ const MainContent: React.FC<MainContentProps> = ({
         return (
           <EventTypesList
             selectedTeam={selectedTeam}
-            setSelectedTeam={setSelectedTeam}
             isDarkMode={isDarkMode}
             eventTypes={eventTypes}
             setEventTypes={setEventTypes}
             teams={teams}
             searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+            setSelectedTeam={setSelectedTeam}
             onEventClick={handleEventClick}
           />
         );
@@ -90,13 +89,12 @@ const MainContent: React.FC<MainContentProps> = ({
         return (
           <EventTypesList
             selectedTeam={selectedTeam}
-            setSelectedTeam={setSelectedTeam}
             isDarkMode={isDarkMode}
             eventTypes={eventTypes}
             setEventTypes={setEventTypes}
             teams={teams}
             searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+            setSelectedTeam={setSelectedTeam}
             onEventClick={handleEventClick}
           />
         );
