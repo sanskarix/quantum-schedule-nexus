@@ -449,7 +449,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
           <DialogHeader>
             <div className="flex items-center space-x-3">
               <DialogTitle className={`text-2xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-                Add New Event Type
+                Add a new event type
               </DialogTitle>
               <span className={`text-xl ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>•</span>
               <button
