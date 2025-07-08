@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Search, Plus, TrendingUp, TrendingDown, Copy, GripVertical, Eye, MoreHorizontal, Edit, Code2, Trash2, ChevronDown, ChevronUp, Calendar, Clock, Users, Grid3X3, Route, Layers, BarChart3 } from 'lucide-react';
+import { Search, Plus, TrendingUp, TrendingDown, Copy, GripVertical, Eye, MoreHorizontal, Edit, Code2, Trash2, ChevronDown, ChevronUp, Calendar, Clock, Users, Grid3X3, Route, Layers, BarChart3, Monitor, MousePointer, Mail } from 'lucide-react';
 import { Button } from './ui/button';
 import { Switch } from './ui/switch';
 import {
@@ -34,6 +34,304 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
   setSearchQuery,
   onEventClick
 }) => {
+  const [showEmbedDialog, setShowEmbedDialog] = useState(false);
+  const [selectedEventForEmbed, setSelectedEventForEmbed] = useState<any>(null);
+  const [selectedEmbedType, setSelectedEmbedType] = useState<string | null>(null);
+  const [embedSettings, setEmbedSettings] = useState({
+    theme: 'auto',
+    hideEventTypeDetails: false,
+    layout: 'month_view',
+    brandColorLight: '#007ee5',
+    brandColorDark: '#007ee5',
+    buttonText: 'Book a meeting',
+    showCalendarIcon: true,
+    position: 'bottom-right',
+    buttonColor: '#007ee5',
+    textColor: '#ffffff'
+  });
+
+  const embedOptions = [
+    {
+      id: 'inline',
+      title: 'Inline Embed',
+      description: 'Loads your event type directly inline with your other website content.',
+      icon: Monitor
+    },
+    {
+      id: 'floating',
+      title: 'Floating pop-up button',
+      description: 'Puts a floating button on your site that triggers a modal with your event type.',
+      icon: MousePointer
+    },
+    {
+      id: 'popup',
+      title: 'Pop up via element click',
+      description: 'Open your calendar as a dialog when someone clicks an element.',
+      icon: MousePointer
+    },
+    {
+      id: 'email',
+      title: 'Email Embed',
+      description: 'Select a few available times and embed them in your Email.',
+      icon: Mail
+    }
+  ];
+
+  const renderEmbedContent = () => {
+    const currentEmbed = embedOptions.find(opt => opt.id === selectedEmbedType);
+    if (!currentEmbed || !selectedEventForEmbed) return null;
+
+    return (
+      <div className="space-y-6">
+        <div>
+          <h2 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            {currentEmbed.title}
+          </h2>
+          <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            {currentEmbed.description}
+          </p>
+        </div>
+
+        {/* Settings Panel */}
+        <div className={`p-4 rounded-lg border ${isDarkMode ? 'border-gray-700 bg-[#151515]' : 'border-gray-200 bg-gray-50'}`}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {selectedEmbedType === 'floating' && (
+              <>
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    Button text
+                  </label>
+                  <input
+                    type="text"
+                    value={embedSettings.buttonText}
+                    onChange={(e) => setEmbedSettings({...embedSettings, buttonText: e.target.value})}
+                    className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#161618] border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                  />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    Position of button
+                  </label>
+                  <select
+                    value={embedSettings.position}
+                    onChange={(e) => setEmbedSettings({...embedSettings, position: e.target.value})}
+                    className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#161618] border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                  >
+                    <option value="bottom-right">Bottom right</option>
+                    <option value="bottom-left">Bottom left</option>
+                    <option value="top-right">Top right</option>
+                    <option value="top-left">Top left</option>
+                  </select>
+                </div>
+              </>
+            )}
+            
+            <div>
+              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Theme
+              </label>
+              <select
+                value={embedSettings.theme}
+                onChange={(e) => setEmbedSettings({...embedSettings, theme: e.target.value})}
+                className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#161618] border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+              >
+                <option value="auto">Auto</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Layout
+              </label>
+              <select
+                value={embedSettings.layout}
+                onChange={(e) => setEmbedSettings({...embedSettings, layout: e.target.value})}
+                className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-[#161618] border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+              >
+                <option value="month_view">Month</option>
+                <option value="week_view">Week</option>
+                <option value="column_view">Column</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Code Tabs */}
+        <div className="space-y-4">
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setActiveCodeTab('html')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium ${activeCodeTab === 'html' ? 'bg-azure text-white' : `${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}`}
+            >
+              HTML
+            </button>
+            <button
+              onClick={() => setActiveCodeTab('react')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium ${activeCodeTab === 'react' ? 'bg-azure text-white' : `${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}`}
+            >
+              React
+            </button>
+          </div>
+          
+          <div className={`p-4 rounded-lg border ${isDarkMode ? 'border-gray-700 bg-[#0d1117]' : 'border-gray-200 bg-gray-50'}`}>
+            <div className="flex items-center justify-between mb-2">
+              <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                {activeCodeTab === 'html' ? 'HTML Code' : 'React Code'}
+              </span>
+              <button
+                onClick={() => copyToClipboard(generateEmbedCode(), 'embed-code')}
+                className={`px-3 py-1 rounded text-sm ${isDarkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`}
+              >
+                {copiedItems['embed-code'] ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+            <pre className={`text-sm overflow-x-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <code>{generateEmbedCode()}</code>
+            </pre>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const generateEmbedCode = () => {
+    if (!selectedEventForEmbed) return '';
+    
+    const eventSlug = selectedEventForEmbed.slug.replace('/', '');
+    
+    if (activeCodeTab === 'html') {
+      switch (selectedEmbedType) {
+        case 'inline':
+          return `<!-- Cal inline embed code begins -->
+<div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline"></div>
+<script type="text/javascript">
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
+Cal("init", "${eventSlug}", {origin:"https://cal.id"});
+
+Cal.ns["${eventSlug}"]("inline", {
+elementOrSelector:"#my-cal-inline",
+config: {"layout":"${embedSettings.layout}"},
+calLink: "${eventSlug}",
+});
+
+Cal.ns["${eventSlug}"]("ui", {"hideEventTypeDetails":${embedSettings.hideEventTypeDetails},"layout":"${embedSettings.layout}"});
+</script>
+<!-- Cal inline embed code ends -->`;
+
+        case 'floating':
+          return `<!-- Cal floating-popup embed code begins -->
+<script type="text/javascript">
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
+Cal("init", "${eventSlug}", {origin:"https://cal.id"});
+
+Cal.ns["${eventSlug}"]("floatingButton", {"calLink":"${eventSlug}","config":{"layout":"${embedSettings.layout}"}});
+Cal.ns["${eventSlug}"]("ui", {"hideEventTypeDetails":${embedSettings.hideEventTypeDetails},"layout":"${embedSettings.layout}"});
+</script>
+<!-- Cal floating-popup embed code ends -->`;
+
+        case 'popup':
+          return `<!-- Cal element-click embed code begins -->
+<script type="text/javascript">
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
+Cal("init", "${eventSlug}", {origin:"https://cal.id"});
+
+// Important: Please add the following attributes to the element that should trigger the calendar to open upon clicking.
+// data-cal-link="${eventSlug}"
+// data-cal-namespace="${eventSlug}"
+// data-cal-config='{"layout":"${embedSettings.layout}"}'
+
+Cal.ns["${eventSlug}"]("ui", {"hideEventTypeDetails":${embedSettings.hideEventTypeDetails},"layout":"${embedSettings.layout}"});
+</script>
+<!-- Cal element-click embed code ends -->`;
+
+        default:
+          return '';
+      }
+    } else {
+      // React code
+      switch (selectedEmbedType) {
+        case 'inline':
+          return `/* First make sure that you have installed the package */
+
+/* If you are using yarn */
+// yarn add @calcom/embed-react
+
+/* If you are using npm */
+// npm install @calcom/embed-react
+
+import Cal, { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+export default function MyApp() {
+useEffect(()=>{
+(async function () {
+const cal = await getCalApi({"namespace":"${eventSlug}","embedLibUrl":"https://app.cal.id/embed-link/embed.js"});
+cal("ui", {"hideEventTypeDetails":${embedSettings.hideEventTypeDetails},"layout":"${embedSettings.layout}"});
+})();
+}, [])
+return <Cal namespace="${eventSlug}"
+calLink="${eventSlug}"
+style={{width:"100%",height:"100%",overflow:"scroll"}}
+config={{"layout":"${embedSettings.layout}"}}
+calOrigin="https://cal.id"
+embedJsUrl="https://app.cal.id/embed-link/embed.js"
+/>;
+};`;
+
+        case 'floating':
+          return `/* First make sure that you have installed the package */
+
+/* If you are using yarn */
+// yarn add @calcom/embed-react
+
+/* If you are using npm */
+// npm install @calcom/embed-react
+
+import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+export default function MyApp() {
+useEffect(()=>{
+(async function () {
+const cal = await getCalApi({"namespace":"${eventSlug}","embedLibUrl":"https://app.cal.id/embed-link/embed.js"});
+cal("floatingButton", {"calLink":"${eventSlug}","calOrigin":"https://cal.id","config":{"layout":"${embedSettings.layout}"}});
+cal("ui", {"hideEventTypeDetails":${embedSettings.hideEventTypeDetails},"layout":"${embedSettings.layout}"});
+})();
+}, [])
+};`;
+
+        case 'popup':
+          return `/* First make sure that you have installed the package */
+
+/* If you are using yarn */
+// yarn add @calcom/embed-react
+
+/* If you are using npm */
+// npm install @calcom/embed-react
+
+import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+export default function MyApp() {
+useEffect(()=>{
+(async function () {
+const cal = await getCalApi({"namespace":"${eventSlug}","embedLibUrl":"https://app.cal.id/embed-link/embed.js"});
+cal("ui", {"hideEventTypeDetails":${embedSettings.hideEventTypeDetails},"layout":"${embedSettings.layout}"});
+})();
+}, [])
+return <button data-cal-namespace="${eventSlug}"
+data-cal-link="${eventSlug}"
+data-cal-origin="https://cal.id"
+data-cal-config='{"layout":"${embedSettings.layout}"}'
+>Click me</button>;
+};`;
+
+        default:
+          return '';
+      }
+    }
+  };
+
+  const [activeCodeTab, setActiveCodeTab] = useState('html');
   const dragCounter = useRef(0);
   const [draggedItem, setDraggedItem] = useState<number | null>(null);
   const [dragOverItem, setDragOverItem] = useState<number | null>(null);
@@ -377,14 +675,28 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                   </div>
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center space-x-2">
-                      <h3 className={`font-semibold text-lg transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                      <h3 className={`font-semibold text-xl transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                         {team.name}
                       </h3>
                     </div>
-                    <div className="flex items-center space-x-1">
+                    <div className={`flex items-center space-x-2 px-3 py-2 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
                       <span className={`text-sm font-mono transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                         {team.slug}
                       </span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          copyToClipboard(team.slug, `team-${team.id}`);
+                        }}
+                        className="relative group"
+                      >
+                        <Copy className={`w-4 h-4 transition-colors duration-300 ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`} />
+                        {copiedItems[`team-${team.id}`] && (
+                          <span className={`absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs rounded shadow-lg ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-900 text-white'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                            Copied!
+                          </span>
+                        )}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -617,7 +929,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
 
                   <div className="flex-1 space-y-3">
                     <div className="flex items-center space-x-3">
-                      <h3 className={`font-semibold text-xl ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                      <h3 className={`font-semibold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
                         {event.title}
                       </h3>
                       <span className={`text-sm px-3 py-1 rounded-full ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
@@ -703,7 +1015,11 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                           <Copy className="w-5 h-5 mr-3" />
                           Duplicate
                         </DropdownMenuItem>
-                        <DropdownMenuItem className={`rounded-lg m-1 text-base ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
+                        <DropdownMenuItem 
+                          onClick={(e) => { e.stopPropagation(); setShowEmbedDialog(true); setSelectedEventForEmbed(event); }}
+                          className={`rounded-lg m-1 text-base ${isDarkMode ? 'text-white hover:bg-gray-700' : 'text-gray-900 hover:bg-gray-100'}`} 
+                          style={{ fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}
+                        >
                           <Code2 className="w-5 h-5 mr-3" />
                           Embed
                         </DropdownMenuItem>
@@ -733,6 +1049,56 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
           </p>
         </div>
       )}
+
+    {/* Embed Dialog */}
+    <Dialog open={showEmbedDialog} onOpenChange={setShowEmbedDialog}>
+      <DialogContent className={`max-w-4xl max-h-[90vh] overflow-y-auto ${isDarkMode ? 'bg-[#1e1e1e] border-gray-700' : 'bg-white border-gray-200'}`}>
+        <DialogHeader>
+          <DialogTitle className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            How do you want to add Cal ID to your site?
+          </DialogTitle>
+          <p className={`text-sm mt-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            Choose one of the following ways to put OneHash Cal on your site.
+          </p>
+        </DialogHeader>
+
+        {!selectedEmbedType ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            {embedOptions.map((option) => (
+              <button
+                key={option.id}
+                onClick={() => setSelectedEmbedType(option.id)}
+                className={`p-6 border rounded-xl text-left transition-all duration-200 hover:shadow-md ${isDarkMode ? 'border-gray-700 hover:border-gray-600 bg-[#151515]' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
+              >
+                <div className="flex items-start space-x-4">
+                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                    <option.icon className="w-6 h-6 text-azure" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className={`font-semibold text-lg mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      {option.title}
+                    </h3>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      {option.description}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-6">
+            <button
+              onClick={() => setSelectedEmbedType(null)}
+              className={`mb-4 text-sm ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
+            >
+              ← Back to options
+            </button>
+            {renderEmbedContent()}
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
     </div>
   );
 };
