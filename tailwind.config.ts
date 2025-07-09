@@ -72,7 +72,7 @@ export default {
 				// Brand colors with #007ee5 as primary blue
 				azure: '#007ee5',
 				pulse: '#F1352C',
-				amber: '#f1f1f1',
+				amber: '#f9a400',
 				quantum: '#008C44'
 			},
 			fontFamily: {
