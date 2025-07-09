@@ -13,8 +13,6 @@ import AllProductsView from './AllProductsView';
 
 interface MainContentProps {
   activeView: string;
-  selectedTeam: any;
-  setSelectedTeam: (team: any) => void;
   isDarkMode: boolean;
   eventTypes: any[];
   setEventTypes: (events: any[]) => void;
@@ -25,8 +23,6 @@ interface MainContentProps {
 
 const MainContent: React.FC<MainContentProps> = ({
   activeView,
-  selectedTeam,
-  setSelectedTeam,
   isDarkMode,
   eventTypes,
   setEventTypes,
@@ -60,8 +56,6 @@ const MainContent: React.FC<MainContentProps> = ({
         return (
           <div className="p-6">
             <EventTypesList
-              selectedTeam={selectedTeam}
-              setSelectedTeam={setSelectedTeam}
               isDarkMode={isDarkMode}
               eventTypes={eventTypes}
               setEventTypes={setEventTypes}
@@ -92,8 +86,6 @@ const MainContent: React.FC<MainContentProps> = ({
         return (
           <div className="p-6">
             <EventTypesList
-              selectedTeam={selectedTeam}
-              setSelectedTeam={setSelectedTeam}
               isDarkMode={isDarkMode}
               eventTypes={eventTypes}
               setEventTypes={setEventTypes}

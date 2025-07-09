@@ -277,7 +277,7 @@ const EventTypesList: React.FC<EventTypesListProps> = ({
                   {event.icon}
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Switch checked={event.isActive} size="sm" />
+                  <Switch checked={event.isActive} />
                   <Button variant="ghost" size="sm" className="w-6 h-6 p-0">
                     <MoreHorizontal className="w-4 h-4" />
                   </Button>
