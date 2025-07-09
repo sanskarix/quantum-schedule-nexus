@@ -58,17 +58,19 @@ const MainContent: React.FC<MainContentProps> = ({
     switch (activeView) {
       case 'event-types':
         return (
-          <EventTypesList
-            selectedTeam={selectedTeam}
-            setSelectedTeam={setSelectedTeam}
-            isDarkMode={isDarkMode}
-            eventTypes={eventTypes}
-            setEventTypes={setEventTypes}
-            teams={teams}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            onEventClick={handleEventClick}
-          />
+          <div className="p-6">
+            <EventTypesList
+              selectedTeam={selectedTeam}
+              setSelectedTeam={setSelectedTeam}
+              isDarkMode={isDarkMode}
+              eventTypes={eventTypes}
+              setEventTypes={setEventTypes}
+              teams={teams}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onEventClick={handleEventClick}
+            />
+          </div>
         );
       case 'bookings':
         return <BookingsView isDarkMode={isDarkMode} />;
@@ -88,26 +90,24 @@ const MainContent: React.FC<MainContentProps> = ({
         return <AllProductsView isDarkMode={isDarkMode} />;
       default:
         return (
-          <EventTypesList
-            selectedTeam={selectedTeam}
-            setSelectedTeam={setSelectedTeam}
-            isDarkMode={isDarkMode}
-            eventTypes={eventTypes}
-            setEventTypes={setEventTypes}
-            teams={teams}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            onEventClick={handleEventClick}
-          />
+          <div className="p-6">
+            <EventTypesList
+              selectedTeam={selectedTeam}
+              setSelectedTeam={setSelectedTeam}
+              isDarkMode={isDarkMode}
+              eventTypes={eventTypes}
+              setEventTypes={setEventTypes}
+              teams={teams}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onEventClick={handleEventClick}
+            />
+          </div>
         );
     }
   };
 
-  return (
-    <div className="p-6">
-      {renderMainContent()}
-    </div>
-  );
+  return renderMainContent();
 };
 
 export default MainContent;
